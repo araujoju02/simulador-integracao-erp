@@ -118,6 +118,37 @@
       min-height: 48px;
       transition: opacity 0.5s ease;
     }
+
+    /* Finalização visual */
+    #finalVisual {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .checkmark {
+      font-size: 4rem;
+      color: #2e7d32;
+      animation: popIn 0.6s ease-out forwards;
+    }
+    .final-message {
+      margin-top: 12px;
+      padding: 10px 18px;
+      background: #e8f5e9;
+      border-radius: 20px;
+      color: #2e7d32;
+      font-weight: bold;
+      font-size: 1.1rem;
+      opacity: 0;
+      animation: fadeInMsg 1s ease forwards 0.6s;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeInMsg {
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -134,6 +165,12 @@
     <div id="statusBadge" class="badge recebido">✅ Pedido recebido</div>
     <div id="message" class="message">O pedido foi recebido pelo sistema. Agora, vamos enviar para a API.</div>
     <button id="nextBtn">Avançar</button>
+
+    <!-- Finalização visual -->
+    <div id="finalVisual">
+      <div class="checkmark">✔️</div>
+      <div class="final-message">Processo finalizado com sucesso!</div>
+    </div>
   </div>
 
   <script>
@@ -141,6 +178,8 @@
     const statusBadge = document.getElementById("statusBadge");
     const message = document.getElementById("message");
     const nextBtn = document.getElementById("nextBtn");
+    const finalVisual = document.getElementById("finalVisual");
+
     const steps = [
       document.getElementById("step-pedido"),
       document.getElementById("step-api"),
@@ -181,13 +220,17 @@
           message.style.opacity = 1;
           nextBtn.disabled = false;
         } else {
+          atualizarEtapa(2);
           message.textContent = transicoes[2].mensagem;
           statusBadge.textContent = transicoes[2].badge.texto;
           statusBadge.className = transicoes[2].badge.classe;
           message.style.opacity = 1;
           nextBtn.disabled = true;
+
+          // Mostrar efeito visual de finalização
+          finalVisual.style.display = "flex";
         }
-      }, 800); // Delay de 800ms pra parecer mais real
+      }, 800);
     });
   </script>
 </body>
