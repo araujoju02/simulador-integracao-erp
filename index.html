@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Simulador de Integração - Pedido, API & ERP</title>
+  <title>Simulador de Integração ERP</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942931.png" type="image/png" />
   <style>
     * {
@@ -11,227 +11,196 @@
     }
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #f8f4fa;
+      background: #f5f0fb;
       color: #3a2e5b;
       margin: 0;
       padding: 20px;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100vh;
     }
     .container {
       background: white;
       padding: 30px;
-      max-width: 480px;
+      max-width: 520px;
       width: 100%;
       border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(58, 46, 91, 0.1);
+      box-shadow: 0 8px 20px rgba(58, 46, 91, 0.15);
       text-align: center;
-      animation: fadeIn 1s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
       color: #6c52a6;
       margin-bottom: 10px;
     }
-    p.description {
-      color: #8a7cb1;
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
       font-size: 1rem;
-      margin-bottom: 30px;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      font-weight: 600;
-      border-radius: 20px;
-      font-size: 1rem;
-      user-select: none;
-      margin-bottom: 30px;
-      min-width: 240px;
-      justify-content: center;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .badge.recebido {
-      background: #d1c4e9;
-      color: #512da8;
-    }
-    .badge.processando {
-      background: #fff3e0;
-      color: #ef6c00;
-    }
-    .badge.entregue {
-      background: #d0f0c0;
-      color: #2e7d32;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
     button {
-      background: #6c52a6;
+      background-color: #6c52a6;
       color: white;
       border: none;
-      padding: 12px 28px;
-      font-size: 1.1rem;
-      border-radius: 24px;
+      font-weight: bold;
       cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 6px 12px rgba(108, 82, 166, 0.4);
-      transition: background-color 0.3s ease;
+      transition: background 0.3s;
     }
-    button:hover:not(:disabled) {
-      background: #573d95;
-    }
-    button:disabled {
-      background: #b7a8d8;
-      cursor: not-allowed;
-      box-shadow: none;
+    button:hover {
+      background-color: #553d94;
     }
     .steps {
       display: flex;
       justify-content: space-around;
-      margin-bottom: 30px;
-      font-size: 2rem;
-      user-select: none;
+      margin: 20px 0;
+      font-size: 1.5rem;
     }
     .step {
-      flex: 1;
       opacity: 0.4;
-      transition: opacity 0.3s ease;
     }
     .step.active {
       opacity: 1;
       color: #6c52a6;
     }
-    .step-label {
-      font-size: 0.9rem;
-      color: #6c52a6;
-      margin-top: 6px;
-      font-weight: 600;
-    }
-    .message {
-      font-size: 1.05rem;
-      color: #4a3f6a;
-      margin-bottom: 30px;
-      min-height: 48px;
-      transition: opacity 0.5s ease;
-    }
-
-    /* Finalização visual */
-    #finalVisual {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 30px;
-    }
-    .checkmark {
-      font-size: 4rem;
-      color: #2e7d32;
-      animation: popIn 0.6s ease-out forwards;
-    }
-    .final-message {
-      margin-top: 12px;
-      padding: 10px 18px;
-      background: #e8f5e9;
+    .badge {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 12px 20px;
       border-radius: 20px;
-      color: #2e7d32;
       font-weight: bold;
+    }
+    .badge.recebido {
+      background: #e0d4fa;
+      color: #5e35b1;
+    }
+    .badge.processando {
+      background: #fff3cd;
+      color: #ff9800;
+    }
+    .badge.entregue {
+      background: #d0f0c0;
+      color: #2e7d32;
+    }
+    .mensagem {
+      min-height: 40px;
       font-size: 1.1rem;
-      opacity: 0;
-      animation: fadeInMsg 1s ease forwards 0.6s;
     }
-    @keyframes popIn {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    .check-icon {
+      font-size: 3rem;
+      animation: bounce 0.6s ease-in-out;
     }
-    @keyframes fadeInMsg {
-      to { opacity: 1; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .historico {
+      margin-top: 40px;
+      text-align: left;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      font-size: 0.95rem;
+    }
+    th {
+      background-color: #f0e6ff;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Simulador de Integração</h1>
-    <p class="description">Simule o fluxo do pedido desde o recebimento até a entrega no ERP.</p>
+    <h1>Simulador de Integração ERP</h1>
+    <input type="text" id="pedido" placeholder="Nº do Pedido" />
+    <input type="text" id="cliente" placeholder="Nome do Cliente" />
+    <input type="text" id="valor" placeholder="Valor do Pedido (R$)" />
+    <button onclick="iniciarSimulacao()">Iniciar Simulação</button>
 
     <div class="steps">
-      <div class="step active" id="step-pedido">📦<div class="step-label">Pedido</div></div>
-      <div class="step" id="step-api">🔄<div class="step-label">API</div></div>
-      <div class="step" id="step-erp">🖥️<div class="step-label">ERP</div></div>
+      <div id="step1" class="step active">📦</div>
+      <div id="step2" class="step">🔄</div>
+      <div id="step3" class="step">🖥️</div>
     </div>
 
-    <div id="statusBadge" class="badge recebido">✅ Pedido recebido</div>
-    <div id="message" class="message">O pedido foi recebido pelo sistema. Agora, vamos enviar para a API.</div>
-    <button id="nextBtn">Avançar</button>
+    <div id="badge" class="badge recebido">✅ Pedido recebido</div>
+    <div id="mensagem" class="mensagem">Preencha os dados e clique em Iniciar.</div>
+    <div id="checkIcon"></div>
 
-    <!-- Finalização visual -->
-    <div id="finalVisual">
-      <div class="checkmark">✔️</div>
-      <div class="final-message">Processo finalizado com sucesso!</div>
+    <div class="historico">
+      <h3>Histórico de Pedidos</h3>
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
 
   <script>
-    let etapaAtual = 0;
-    const statusBadge = document.getElementById("statusBadge");
-    const message = document.getElementById("message");
-    const nextBtn = document.getElementById("nextBtn");
-    const finalVisual = document.getElementById("finalVisual");
+    let etapa = 0;
 
-    const steps = [
-      document.getElementById("step-pedido"),
-      document.getElementById("step-api"),
-      document.getElementById("step-erp"),
-    ];
+    function iniciarSimulacao() {
+      const pedido = document.getElementById("pedido").value.trim();
+      const cliente = document.getElementById("cliente").value.trim();
+      const valor = document.getElementById("valor").value.trim();
 
-    const atualizarEtapa = (etapa) => {
-      steps.forEach((step, i) => step.classList.toggle("active", i === etapa));
-    };
-
-    const transicoes = [
-      {
-        badge: { texto: "⏳ Processando na API", classe: "badge processando" },
-        mensagem: "O pedido está sendo processado pela API, integrando os dados."
-      },
-      {
-        badge: { texto: "📦 Entregue ao ERP", classe: "badge entregue" },
-        mensagem: "O pedido foi enviado ao ERP e está sendo processado para faturamento."
-      },
-      {
-        badge: { texto: "✅ Finalizado", classe: "badge entregue" },
-        mensagem: "Processo concluído! Obrigada por usar o simulador.😉"
+      if (!pedido || !cliente || !valor) {
+        alert("Por favor, preencha todos os campos.");
+        return;
       }
-    ];
 
-    nextBtn.addEventListener("click", () => {
-      etapaAtual++;
-      nextBtn.disabled = true;
-      message.style.opacity = 0;
+      etapa = 1;
+      atualizarEtapa(1);
+      document.getElementById("badge").className = "badge processando";
+      document.getElementById("badge").textContent = "⏳ Processando na API";
+      document.getElementById("mensagem").textContent = "Integrando pedido com API...";
+      document.getElementById("checkIcon").innerHTML = "";
 
       setTimeout(() => {
-        if (etapaAtual < transicoes.length) {
-          atualizarEtapa(etapaAtual);
-          const etapa = transicoes[etapaAtual - 1];
-          statusBadge.textContent = etapa.badge.texto;
-          statusBadge.className = etapa.badge.classe;
-          message.textContent = etapa.mensagem;
-          message.style.opacity = 1;
-          nextBtn.disabled = false;
-        } else {
-          atualizarEtapa(2);
-          message.textContent = transicoes[2].mensagem;
-          statusBadge.textContent = transicoes[2].badge.texto;
-          statusBadge.className = transicoes[2].badge.classe;
-          message.style.opacity = 1;
-          nextBtn.disabled = true;
+        etapa = 2;
+        atualizarEtapa(2);
+        document.getElementById("badge").className = "badge entregue";
+        document.getElementById("badge").textContent = "📦 Entregue ao ERP";
+        document.getElementById("mensagem").textContent = "Pedido entregue ao ERP."
+      }, 2000);
 
-          // Mostrar efeito visual de finalização
-          finalVisual.style.display = "flex";
-        }
-      }, 800);
-    });
+      setTimeout(() => {
+        etapa = 3;
+        atualizarEtapa(3);
+        document.getElementById("badge").textContent = "✅ Finalizado";
+        document.getElementById("checkIcon").innerHTML = "<div class='check-icon'>🎉</div>";
+        document.getElementById("mensagem").textContent = `Pedido #${pedido} finalizado com sucesso! Obrigado, ${cliente} 😊`;
+        adicionarHistorico(pedido, cliente, valor);
+      }, 4000);
+    }
+
+    function atualizarEtapa(num) {
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById(`step${i}`).classList.remove("active");
+      }
+      if (num <= 3) {
+        document.getElementById(`step${num}`).classList.add("active");
+      }
+    }
+
+    function adicionarHistorico(pedido, cliente, valor) {
+      const tabela = document.querySelector("#tabela tbody");
+      const linha = document.createElement("tr");
+      linha.innerHTML = `<td>${pedido}</td><td>${cliente}</td><td>R$ ${parseFloat(valor).toFixed(2)}</td>`;
+      tabela.appendChild(linha);
+    }
   </script>
 </body>
 </html>
+
