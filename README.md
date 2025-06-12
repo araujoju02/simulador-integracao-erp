@@ -37,9 +37,7 @@ Simular, de forma didática e visual, o processo de envio de um pedido, seu proc
 ├── style.css ← Estilos personalizados para layout clean e moderno
 └── script.js ← Lógica da simulação, animações e manipulação DOM
 
-yaml
-Copiar
-Editar
+
 
 ---
 
