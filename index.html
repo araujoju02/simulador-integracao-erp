@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Simulador de Integração - Pedido, API & ERP</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942931.png" type="image/png" />
   <style>
-    /* Reset básico */
     * {
       box-sizing: border-box;
     }
@@ -17,6 +17,8 @@
       padding: 20px;
       display: flex;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
     .container {
       background: white;
@@ -26,6 +28,11 @@
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(58, 46, 91, 0.1);
       text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
       color: #6c52a6;
@@ -36,8 +43,6 @@
       font-size: 1rem;
       margin-bottom: 30px;
     }
-
-    /* Badge comum */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -50,9 +55,8 @@
       margin-bottom: 30px;
       min-width: 240px;
       justify-content: center;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
-    /* Status diferentes */
     .badge.recebido {
       background: #d1c4e9;
       color: #512da8;
@@ -65,8 +69,6 @@
       background: #d0f0c0;
       color: #2e7d32;
     }
-
-    /* Botão estilizado */
     button {
       background: #6c52a6;
       color: white;
@@ -87,13 +89,6 @@
       cursor: not-allowed;
       box-shadow: none;
     }
-
-    /* Ícones simples via Unicode */
-    .icon {
-      font-size: 1.4rem;
-    }
-
-    /* Passos visual */
     .steps {
       display: flex;
       justify-content: space-around;
@@ -116,15 +111,13 @@
       margin-top: 6px;
       font-weight: 600;
     }
-
-    /* Mensagem explicativa */
     .message {
       font-size: 1.05rem;
       color: #4a3f6a;
       margin-bottom: 30px;
       min-height: 48px;
+      transition: opacity 0.5s ease;
     }
-
   </style>
 </head>
 <body>
@@ -132,41 +125,19 @@
     <h1>Simulador de Integração</h1>
     <p class="description">Simule o fluxo do pedido desde o recebimento até a entrega no ERP.</p>
 
-    <!-- Passos com ícones -->
     <div class="steps">
-      <div class="step active" id="step-pedido">
-        📦
-        <div class="step-label">Pedido</div>
-      </div>
-      <div class="step" id="step-api">
-        🔄
-        <div class="step-label">API</div>
-      </div>
-      <div class="step" id="step-erp">
-        🖥️
-        <div class="step-label">ERP</div>
-      </div>
+      <div class="step active" id="step-pedido">📦<div class="step-label">Pedido</div></div>
+      <div class="step" id="step-api">🔄<div class="step-label">API</div></div>
+      <div class="step" id="step-erp">🖥️<div class="step-label">ERP</div></div>
     </div>
 
-    <!-- Badge com status -->
-    <div id="statusBadge" class="badge recebido">
-      ✅ Pedido recebido
-    </div>
-
-    <!-- Mensagem explicativa -->
-    <div id="message" class="message">
-      O pedido foi recebido pelo sistema. Agora, vamos enviar para a API.
-    </div>
-
-    <!-- Botão para avançar no processo -->
+    <div id="statusBadge" class="badge recebido">✅ Pedido recebido</div>
+    <div id="message" class="message">O pedido foi recebido pelo sistema. Agora, vamos enviar para a API.</div>
     <button id="nextBtn">Avançar</button>
   </div>
 
   <script>
-    /* Estado da etapa atual (0 = pedido, 1 = API, 2 = ERP) */
     let etapaAtual = 0;
-
-    // Referências dos elementos
     const statusBadge = document.getElementById("statusBadge");
     const message = document.getElementById("message");
     const nextBtn = document.getElementById("nextBtn");
@@ -176,38 +147,48 @@
       document.getElementById("step-erp"),
     ];
 
+    const atualizarEtapa = (etapa) => {
+      steps.forEach((step, i) => step.classList.toggle("active", i === etapa));
+    };
+
+    const transicoes = [
+      {
+        badge: { texto: "⏳ Processando na API", classe: "badge processando" },
+        mensagem: "O pedido está sendo processado pela API, integrando os dados."
+      },
+      {
+        badge: { texto: "📦 Entregue ao ERP", classe: "badge entregue" },
+        mensagem: "O pedido foi enviado ao ERP e está sendo processado para faturamento."
+      },
+      {
+        badge: { texto: "✅ Finalizado", classe: "badge entregue" },
+        mensagem: "Processo concluído! Obrigada por usar o simulador, Juliana 😉."
+      }
+    ];
+
     nextBtn.addEventListener("click", () => {
       etapaAtual++;
+      nextBtn.disabled = true;
+      message.style.opacity = 0;
 
-      if (etapaAtual === 1) {
-        // Atualiza passo ativo
-        steps[0].classList.remove("active");
-        steps[1].classList.add("active");
-
-        // Atualiza badge
-        statusBadge.textContent = "⏳ Processando na API";
-        statusBadge.className = "badge processando";
-
-        // Atualiza mensagem
-        message.textContent =
-          "O pedido está sendo processado pela API, integrando os dados.";
-      } else if (etapaAtual === 2) {
-        steps[1].classList.remove("active");
-        steps[2].classList.add("active");
-
-        statusBadge.textContent = "📦 Entregue ao ERP";
-        statusBadge.className = "badge entregue";
-
-        message.textContent =
-          "O pedido foi enviado ao ERP e está sendo processado para faturamento.";
-      } else {
-        // Fim do processo
-        nextBtn.disabled = true;
-        message.textContent =
-          "Processo concluído! Obrigada por usar o simulador, Juliana 😉.";
-      }
+      setTimeout(() => {
+        if (etapaAtual < transicoes.length) {
+          atualizarEtapa(etapaAtual);
+          const etapa = transicoes[etapaAtual - 1];
+          statusBadge.textContent = etapa.badge.texto;
+          statusBadge.className = etapa.badge.classe;
+          message.textContent = etapa.mensagem;
+          message.style.opacity = 1;
+          nextBtn.disabled = false;
+        } else {
+          message.textContent = transicoes[2].mensagem;
+          statusBadge.textContent = transicoes[2].badge.texto;
+          statusBadge.className = transicoes[2].badge.classe;
+          message.style.opacity = 1;
+          nextBtn.disabled = true;
+        }
+      }, 800); // Delay de 800ms pra parecer mais real
     });
   </script>
 </body>
 </html>
-
