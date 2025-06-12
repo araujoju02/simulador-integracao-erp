@@ -1,44 +1,75 @@
-# Simulador de Integração com ERP
+# Simulador de Integração Pedido > API > ERP 🚀
 
-Este projeto é uma simulação simples do fluxo de integração de pedidos entre um sistema de vendas e um ERP, que representa parte do meu dia a dia como Analista de Implantação.
+Um projeto simples e funcional que demonstra o fluxo básico de integração entre sistemas:
 
-## Objetivo
-
-Demonstrar, de forma prática, o envio de dados de um pedido para um ERP via API, utilizando um formulário web simples que gera um payload JSON. O foco é evidenciar conhecimentos em:
-
-- Estrutura de dados (JSON)
-- Simulação de integração de sistemas (API)
-- Desenvolvimento front-end básico (HTML, CSS, JavaScript)
-- Visualização clara do fluxo de dados (pedido > API > ERP)
-
-## Funcionalidades
-
-- Formulário para inserção dos dados do pedido (cliente, produto, valor, forma de pagamento).
-- Simulação do envio para um ERP via API, com exibição do payload JSON formatado.
-- Visualização do status do envio.
-- Passo a passo visual com ícones representando o fluxo de integração.
-
-## Tecnologias Utilizadas
-
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
-
-## Como usar
-
-1. Abra o arquivo `index.html` no seu navegador.
-2. Preencha o formulário com os dados do pedido.
-3. Clique em "Enviar para ERP" para visualizar o payload JSON enviado e o status.
+**Pedido enviado → API intermediária → ERP final**
 
 ---
 
-Este projeto reflete uma visão prática do processo de integração de sistemas corporativos e pode ser facilmente expandido para incluir chamadas reais de API e validação mais robusta.
+## 📌 Objetivo
+
+Simular, de forma didática e visual, o processo de envio de um pedido, seu processamento via API e a integração final com um sistema ERP. Ideal para demonstrar conceitos de integração, APIs e fluxo de dados em sistemas corporativos.
 
 ---
 
-**Autora:** Juliana Araújo  
-**Contato:** araujojuliana488@gmail.com | [LinkedIn](https://www.linkedin.com/in/anailuj-araújo)
+## ⚙️ Tecnologias utilizadas
+
+- HTML5, CSS3 e JavaScript ES6+
+- Interface simples e responsiva com foco na experiência do usuário
+- Código comentado para fácil entendimento e manutenção
 
 ---
 
-Obrigado pela visita!
+## 🛠️ Funcionalidades
+
+- 📥 Simulação do envio de pedido
+- 🔄 Processamento intermediário via API (simulado)
+- 📊 Exibição visual das etapas com ícones e animações simples
+- 📝 Logs e mensagens explicativas em cada etapa
+
+---
+
+## 🗂️ Estrutura do projeto
+
+/simulador-integracao
+│
+├── index.html ← Página principal com interface visual e fluxo
+├── style.css ← Estilos personalizados para layout clean e moderno
+└── script.js ← Lógica da simulação, animações e manipulação DOM
+
+yaml
+Copiar
+Editar
+
+---
+
+## 👀 Como usar
+
+1. Clone ou baixe este repositório.
+2. Abra o arquivo `index.html` no seu navegador.
+3. Clique no botão "Enviar Pedido" para iniciar a simulação.
+4. Observe as etapas de integração sendo exibidas em tempo real.
+
+---
+
+## 💡 Melhoria & Extras
+
+- Comentários detalhados no código explicando cada função e fluxo.
+- Uso de ícones SVG para reforçar o passo a passo visual.
+- Design responsivo para uso em diferentes dispositivos.
+
+---
+
+## 📫 Contato
+
+**Juliana Araújo**  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Juliana%20Araújo-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/anailuj-araújo)  
+✉️ araujojuliana488@gmail.com
+
+---
+
+<div align="center">
+  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow" alt="Status"/>
+  <img src="https://img.shields.io/badge/Linguagens-HTML%20|%20CSS%20|%20JavaScript-blue" alt="Tecnologias"/>
+  <img src="https://img.shields.io/badge/Nível-Iniciante%20|%20Intermediário-green" alt="Nível"/>
+</div>
