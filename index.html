@@ -6,68 +6,101 @@
   <title>Simulador de Integração - Pedido, API & ERP</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942931.png" type="image/png" />
   <style>
+    :root {
+      --color-bg-light: #f8f4fa;
+      --color-text-light: #3a2e5b;
+      --color-primary: #6c52a6;
+      --color-primary-dark: #573d95;
+      --color-badge-recebido-bg: #d1c4e9;
+      --color-badge-recebido-text: #512da8;
+      --color-badge-processando-bg: #fff3e0;
+      --color-badge-processando-text: #ef6c00;
+      --color-badge-entregue-bg: #d0f0c0;
+      --color-badge-entregue-text: #2e7d32;
+      --color-success: #4CAF50;
+      --color-error: #e53935;
+      --color-shadow: rgba(58, 46, 91, 0.1);
+    }
+    [data-theme="dark"] {
+      --color-bg-light: #2c2a3a;
+      --color-text-light: #ddd9f3;
+      --color-primary: #9a7efc;
+      --color-primary-dark: #7c68db;
+      --color-badge-recebido-bg: #4a3f6a;
+      --color-badge-recebido-text: #c7c3f0;
+      --color-badge-processando-bg: #6a5a3b;
+      --color-badge-processando-text: #ffb74d;
+      --color-badge-entregue-bg: #2e4a32;
+      --color-badge-entregue-text: #a7d48c;
+      --color-success: #81c784;
+      --color-error: #ef9a9a;
+      --color-shadow: rgba(0,0,0,0.8);
+    }
+
     * {
       box-sizing: border-box;
     }
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #f8f4fa;
-      color: #3a2e5b;
+      background: var(--color-bg-light);
+      color: var(--color-text-light);
       margin: 0;
       padding: 20px;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
     }
     .container {
       background: white;
-      padding: 30px 40px 40px;
-      max-width: 480px;
+      padding: 30px 30px 20px;
+      max-width: 520px;
       width: 100%;
       border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(58, 46, 91, 0.1);
+      box-shadow: 0 8px 20px var(--color-shadow);
       text-align: center;
       animation: fadeIn 1s ease-out;
+      position: relative;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     h1 {
-      color: #6c52a6;
+      color: var(--color-primary);
       margin-bottom: 10px;
     }
     p.description {
       color: #8a7cb1;
       font-size: 1rem;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
     label {
       display: block;
-      margin-top: 15px;
+      text-align: left;
       margin-bottom: 6px;
       font-weight: 600;
-      color: #6c52a6;
-      text-align: left;
+      color: var(--color-primary);
     }
     input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 10px 14px;
-      border: 2px solid #d1c4e9;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      border: 2px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
-      color: #3a2e5b;
       transition: border-color 0.3s ease;
     }
     input[type="text"]:focus, input[type="number"]:focus {
-      border-color: #6c52a6;
       outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 8px var(--color-primary);
     }
     .steps {
       display: flex;
       justify-content: space-around;
-      margin: 30px 0 25px;
+      margin-bottom: 25px;
       font-size: 2rem;
       user-select: none;
     }
@@ -75,14 +108,17 @@
       flex: 1;
       opacity: 0.4;
       transition: opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .step.active {
       opacity: 1;
-      color: #6c52a6;
+      color: var(--color-primary);
     }
     .step-label {
       font-size: 0.9rem;
-      color: #6c52a6;
+      color: var(--color-primary);
       margin-top: 6px;
       font-weight: 600;
     }
@@ -95,37 +131,28 @@
       border-radius: 20px;
       font-size: 1rem;
       user-select: none;
+      margin-bottom: 25px;
       min-width: 240px;
       justify-content: center;
       transition: background-color 0.3s ease, color 0.3s ease;
-      margin: 0 auto 25px;
     }
     .badge.recebido {
-      background: #d1c4e9;
-      color: #512da8;
+      background: var(--color-badge-recebido-bg);
+      color: var(--color-badge-recebido-text);
     }
     .badge.processando {
-      background: #fff3e0;
-      color: #ef6c00;
+      background: var(--color-badge-processando-bg);
+      color: var(--color-badge-processando-text);
     }
     .badge.entregue {
-      background: #d0f0c0;
-      color: #2e7d32;
-    }
-    .message {
-      font-size: 1.05rem;
-      color: #4a3f6a;
-      margin-bottom: 30px;
-      min-height: 60px;
-      transition: opacity 0.5s ease;
-      line-height: 1.3;
-      user-select: none;
+      background: var(--color-badge-entregue-bg);
+      color: var(--color-badge-entregue-text);
     }
     button {
-      background: #6c52a6;
+      background: var(--color-primary);
       color: white;
       border: none;
-      padding: 14px 32px;
+      padding: 12px 28px;
       font-size: 1.1rem;
       border-radius: 24px;
       cursor: pointer;
@@ -133,158 +160,644 @@
       box-shadow: 0 6px 12px rgba(108, 82, 166, 0.4);
       transition: background-color 0.3s ease;
       user-select: none;
-      display: block;
-      margin: 0 auto;
-      min-width: 140px;
+      margin: 0 6px;
     }
     button:hover:not(:disabled) {
-      background: #573d95;
+      background: var(--color-primary-dark);
     }
     button:disabled {
       background: #b7a8d8;
       cursor: not-allowed;
       box-shadow: none;
     }
-    /* Estilo para o grande check final */
-    .finalizado-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      margin-top: 15px;
-      opacity: 0;
-      transform: scale(0.7);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+    .message {
+      font-size: 1.05rem;
+      color: var(--color-text-light);
+      margin-bottom: 30px;
+      min-height: 56px;
+      transition: opacity 0.5s ease;
       user-select: none;
     }
-    .finalizado-container.show {
-      opacity: 1;
-      transform: scale(1);
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
     }
-    .finalizado-check {
-      font-size: 5rem;
-      color: #2e7d32;
-      animation: bounceCheck 0.7s ease forwards;
+    .input-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
-    @keyframes bounceCheck {
-      0% { transform: scale(0.5) translateY(20px); opacity: 0; }
-      60% { transform: scale(1.2) translateY(-10px); opacity: 1; }
-      100% { transform: scale(1) translateY(0); opacity: 1; }
+    .input-row > div {
+      flex: 1;
+      min-width: 140px;
     }
-    .finalizado-msg {
-      font-size: 1.25rem;
-      color: #4a3f6a;
+    .error-message {
+      color: var(--color-error);
+      font-size: 0.85rem;
+      margin-top: -12px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: var(--color-primary);
+      color: white;
       font-weight: 600;
-      animation: fadeInMsg 1s ease forwards;
     }
-    @keyframes fadeInMsg {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    tbody tr:nth-child(even) {
+      background: #f3f0ff;
+    }
+    tbody tr:hover {
+      background: #e0dbf7;
+    }
+    .history-container {
+      margin-top: 30px;
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 12px 10px;
+      background: #faf7ff;
+    }
+    .btn-delete {
+      background: #e53935;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: none;
+      transition: background-color 0.3s ease;
+      color: white;
+    }
+    .btn-delete:hover {
+      background: #b71c1c;
+    }
+    .btn-export {
+      background: #4caf50;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: none;
+      transition: background-color 0.3s ease;
+      color: white;
+      margin-top: 12px;
+      user-select: none;
+    }
+    .btn-export:hover {
+      background: #357a38;
+    }
+    .buttons-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .final-icon {
+      font-size: 5rem;
+      color: var(--color-success);
+      margin-bottom: 12px;
+      animation: popIn 0.8s ease forwards;
+      user-select: none;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.2); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .final-message {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      user-select: none;
+      animation: fadeSlideIn 1s ease forwards;
+    }
+    @keyframes fadeSlideIn {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    /* Toggle Theme button */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: var(--color-primary);
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 30px;
+      padding: 8px 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(108, 82, 166, 0.4);
+      user-select: none;
+      transition: background-color 0.3s ease;
+      z-index: 999;
+    }
+    .theme-toggle:hover {
+      background: var(--color-primary-dark);
     }
   </style>
 </head>
-<body>
-  <div class="container">
+<body data-theme="light">
+
+  <button class="theme-toggle" id="themeToggle" title="Alternar tema claro/escuro">🌙 Tema</button>
+
+  <div class="container" role="main" aria-label="Simulador de Integração ERP">
+
     <h1>Simulador de Integração</h1>
     <p class="description">Simule o fluxo do pedido desde o recebimento até a entrega no ERP.</p>
 
-    <!-- Formulário interativo -->
-    <form id="pedidoForm" autocomplete="off">
-      <label for="numeroPedido">Número do Pedido</label>
-      <input type="text" id="numeroPedido" name="numeroPedido" placeholder="Ex: 12345" required />
-
-      <label for="nomeCliente">Nome do Cliente</label>
-      <input type="text" id="nomeCliente" name="nomeCliente" placeholder="Ex: Maria Silva" required />
-
-      <label for="valorPedido">Valor do Pedido (R$)</label>
-      <input type="number" id="valorPedido" name="valorPedido" placeholder="Ex: 259.90" min="0" step="0.01" required />
-    </form>
-
-    <div class="steps" aria-label="Etapas do processo">
-      <div class="step active" id="step-pedido">📦<div class="step-label">Pedido</div></div>
+    <div class="steps" aria-live="polite">
+      <div class="step active" id="step-pedido" aria-current="step">📦<div class="step-label">Pedido</div></div>
       <div class="step" id="step-api">🔄<div class="step-label">API</div></div>
       <div class="step" id="step-erp">🖥️<div class="step-label">ERP</div></div>
+      <div class="step" id="step-finalizado">🎉<div class="step-label">Finalizado</div></div>
     </div>
 
-    <div id="statusBadge" class="badge recebido">✅ Pedido recebido</div>
-    <div id="message" class="message">O pedido foi recebido pelo sistema. Agora, vamos enviar para a API.</div>
+    <form id="orderForm" novalidate>
+      <div class="input-row" id="formInputs">
+        <div class="form-group">
+          <label for="orderNumber">Número do Pedido *</label>
+          <input type="text" id="orderNumber" name="orderNumber" autocomplete="off" required aria-required="true" aria-describedby="errorOrderNumber" />
+          <div class="error-message" id="errorOrderNumber" role="alert" aria-live="assertive"></div>
+        </div>
+        <div class="form-group">
+          <label for="clientName">Nome do Cliente *</label>
+          <input type="text" id="clientName" name="clientName" autocomplete="off" required aria-required="true" aria-describedby="errorClientName" />
+          <div class="error-message" id="errorClientName" role="alert" aria-live="assertive"></div>
+        </div>
+        <div class="form-group">
+          <label for="orderValue">Valor (R$) *</label>
+          <input type="text" id="orderValue" name="orderValue" placeholder="R$ 0,00" autocomplete="off" required aria-required="true" aria-describedby="errorOrderValue" inputmode="decimal" />
+          <div class="error-message" id="errorOrderValue" role="alert" aria-live="assertive"></div>
+        </div>
+      </div>
+    </form>
 
-    <button id="nextBtn" type="button" aria-live="polite">Avançar</button>
+    <div class="badge recebido" id="statusBadge" aria-live="polite">Status: Pedido Recebido</div>
 
-    <!-- Finalização visual -->
-    <div id="finalizado" class="finalizado-container" role="alert" aria-live="assertive" aria-atomic="true" aria-relevant="all">
-      <div class="finalizado-check">✔️</div>
-      <div class="finalizado-msg">💜 Pedido finalizado com sucesso! Obrigada por usar o simulador.</div>
+    <div class="buttons-row">
+      <button id="btnNext" type="button" aria-label="Avançar para próxima etapa">Avançar ▶️</button>
+      <button id="btnNew" type="button" style="display:none;" aria-label="Novo pedido">Novo Pedido</button>
     </div>
+
+    <div class="message" id="finalMessage" aria-live="polite" role="status"></div>
+    <div class="final-icon" id="finalIcon" aria-hidden="true" style="display:none;">✔️</div>
+
+    <section class="history-container" aria-label="Histórico de pedidos simulados">
+      <h2>Histórico de Pedidos</h2>
+      <table id="historyTable" aria-live="polite" role="grid">
+        <thead>
+          <tr>
+            <th scope="col">Número</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Valor (R$)</th>
+            <th scope="col">Status</th>
+            <th scope="col">Excluir</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <!-- Histórico vai aqui -->
+        </tbody>
+      </table>
+      <button class="btn-export" id="btnExport" aria-label="Exportar histórico para CSV">Exportar CSV</button>
+    </section>
+
   </div>
 
-  <script>
-    const form = document.getElementById("pedidoForm");
-    const nextBtn = document.getElementById("nextBtn");
-    const statusBadge = document.getElementById("statusBadge");
-    const message = document.getElementById("message");
-    const finalizado = document.getElementById("finalizado");
-    const steps = [
-      document.getElementById("step-pedido"),
-      document.getElementById("step-api"),
-      document.getElementById("step-erp"),
-    ];
+<script>
+  (() => {
+    const orderForm = document.getElementById('orderForm');
+    const btnNext = document.getElementById('btnNext');
+    const btnNew = document.getElementById('btnNew');
+    const statusBadge = document.getElementById('statusBadge');
+    const finalMessage = document.getElementById('finalMessage');
+    const finalIcon = document.getElementById('finalIcon');
+    const historyBody = document.getElementById('historyBody');
+    const btnExport = document.getElementById('btnExport');
+    const themeToggle = document.getElementById('themeToggle');
 
-    let etapaAtual = 0;
+    let currentStep = 0;
+    const steps = ['Pedido Recebido', 'Processando API', 'Pedido Entregue no ERP', 'Integração Concluída'];
+    const stepIds = ['step-pedido', 'step-api', 'step-erp', 'step-finalizado'];
+    const statusClasses = ['recebido', 'processando', 'entregue', 'entregue'];
+    const statusColors = ['#512da8', '#ef6c00', '#2e7d32', '#2e7d32'];
 
-    const atualizarEtapa = (etapa) => {
-      steps.forEach((step, i) => step.classList.toggle("active", i === etapa));
-    };
+    let ordersHistory = JSON.parse(localStorage.getItem('ordersHistory')) || [];
 
-    const transicoes = [
-      {
-        badge: { texto: "⏳ Processando na API", classe: "badge processando" },
-        mensagem: "O pedido está sendo processado pela API, integrando os dados."
-      },
-      {
-        badge: { texto: "📦 Entregue ao ERP", classe: "badge entregue" },
-        mensagem: "O pedido foi enviado ao ERP e está sendo processado para faturamento."
-      },
-      {
-        badge: { texto: "✅ Finalizado", classe: "badge entregue" },
-        mensagem: "Processo concluído! Obrigada por usar o simulador.😉"
+    function updateStepUI() {
+      stepIds.forEach((id, i) => {
+        const stepElem = document.getElementById(id);
+        if (!stepElem) return;
+        if (i === currentStep) {
+          stepElem.classList.add('active');
+          stepElem.setAttribute('aria-current', 'step');
+        } else {
+          stepElem.classList.remove('active');
+          stepElem.removeAttribute('aria-current');
+        }
+      });
+
+      // Atualiza badge
+      statusBadge.textContent = 'Status: ' + steps[currentStep];
+      statusBadge.className = 'badge ' + statusClasses[currentStep];
+
+      // Desabilita botões dependendo do passo
+      btnNext.disabled = currentStep === steps.length - 1;
+      btnNew.style.display = currentStep === steps.length - 1 ? 'inline-block' : 'none';
+
+      if (currentStep === steps.length - 1) {
+        // Final
+        finalIcon.style.display = 'block';
+        finalMessage.textContent = 'Pedido integrado com sucesso! 🎉 Obrigada por usar nosso simulador com carinho e profissionalismo.';
+        btnNext.style.cursor = 'not-allowed';
+      } else {
+        finalIcon.style.display = 'none';
+        finalMessage.textContent = '';
+        btnNext.style.cursor = 'pointer';
       }
-    ];
+    }
 
-    const validarFormulario = () => {
-      return form.checkValidity();
-    };
+    // Validação básica
+    function validateForm() {
+      let valid = true;
 
-    nextBtn.addEventListener("click", () => {
-      if (etapaAtual === 0 && !validarFormulario()) {
-        form.reportValidity();
+      const orderNumber = orderForm.orderNumber.value.trim();
+      const clientName = orderForm.clientName.value.trim();
+      const orderValueRaw = orderForm.orderValue.value.trim();
+
+      // Limpa erros
+      ['OrderNumber', 'ClientName', 'OrderValue'].forEach(id => {
+        document.getElementById('error' + id).textContent = '';
+      });
+
+      if (!orderNumber) {
+        document.getElementById('errorOrderNumber').textContent = 'Número do pedido é obrigatório.';
+        valid = false;
+      }
+      if (!clientName) {
+        document.getElementById('errorClientName').textContent = 'Nome do cliente é obrigatório.';
+        valid = false;
+      }
+      // Valor deve estar no formato R$ 0,00
+      // Remove R$, espaços e pontos, troca vírgula por ponto para parsear float
+      let valueNum = parseFloat(orderValueRaw.replace(/[R$\s\.]/g, '').replace(',', '.'));
+      if (!orderValueRaw || isNaN(valueNum) || valueNum <= 0) {
+        document.getElementById('errorOrderValue').textContent = 'Valor deve ser maior que zero.';
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    // Máscara simples para valor R$
+    function formatCurrency(value) {
+      // Remove tudo que não for número ou vírgula
+      value = value.replace(/[^\d\,]/g, '');
+
+      // Substitui vírgula por ponto temporariamente para formatar
+      value = value.replace(',', '.');
+
+      let num = parseFloat(value);
+      if (isNaN(num)) return '';
+
+      return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    // Formata campo valor enquanto digita
+    const orderValueInput = orderForm.orderValue;
+    orderValueInput.addEventListener('input', e => {
+      let cursorPos = orderValueInput.selectionStart;
+      let oldLength = orderValueInput.value.length;
+
+      let val = orderValueInput.value;
+
+      // Remove prefix R$ para evitar repetição
+      val = val.replace(/^R\$\s?/, '');
+
+      // Formata
+      val = val.replace(/[^\d\,\.]/g, ''); // só números, vírgula e ponto
+      // Troca ponto por vírgula, pois BR usa vírgula para decimal
+      val = val.replace(/\./g, ',');
+
+      // Remove vírgulas extras
+      let parts = val.split(',');
+      if (parts.length > 2) {
+        val = parts[0] + ',' + parts.slice(1).join('');
+      }
+
+      let numericPart = val.replace(',', '.');
+      let floatVal = parseFloat(numericPart);
+      if (isNaN(floatVal)) {
+        orderValueInput.value = '';
         return;
       }
 
-      etapaAtual++;
-      nextBtn.disabled = true;
-      message.style.opacity = 0;
+      let formatted = floatVal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2, style: 'currency', currency: 'BRL' });
+      orderValueInput.value = formatted;
 
-      setTimeout(() => {
-        if (etapaAtual < transicoes.length) {
-          atualizarEtapa(etapaAtual);
-          const etapa = transicoes[etapaAtual - 1];
-          statusBadge.textContent = etapa.badge.texto;
-          statusBadge.className = etapa.badge.classe;
-          message.textContent = etapa.mensagem;
-          message.style.opacity = 1;
-          nextBtn.disabled = false;
-        } else {
-          // Mostrar finalização visual
-          statusBadge.style.display = "none";
-          message.style.display = "none";
-          nextBtn.style.display = "none";
-          form.style.display = "none";
-          steps.forEach(s => s.style.display = "none");
-          finalizado.classList.add("show");
-        }
-      }, 800);
+      // Ajusta cursor
+      let newLength = orderValueInput.value.length;
+      let diff = newLength - oldLength;
+      orderValueInput.selectionStart = orderValueInput.selectionEnd = cursorPos + diff;
     });
-  </script>
+
+    // Avançar etapa
+    btnNext.addEventListener('click', () => {
+      if (currentStep === 0) {
+        // Validar formulário antes de avançar do pedido
+        if (!validateForm()) return;
+      }
+      if (currentStep < steps.length - 1) {
+        btnNext.disabled = true;
+        btnNext.textContent = 'Processando... ⏳';
+
+        // Simula tempo para cada etapa: 1.5s para API, 2s para ERP, 1.5s para finalização
+        let delay = 1500;
+        if (currentStep === 1) delay = 2000;
+
+        setTimeout(() => {
+          currentStep++;
+          updateStepUI();
+
+          if (currentStep === steps.length - 1) {
+            // Salvar pedido no histórico
+            addOrderToHistory({
+              number: orderForm.orderNumber.value.trim(),
+              client: orderForm.clientName.value.trim(),
+              value: orderForm.orderValue.value.trim(),
+              status: steps[currentStep]
+            });
+            // Bloqueia form inputs e botão avançar
+            Array.from(orderForm.elements).forEach(el => el.disabled = true);
+            btnNext.disabled = true;
+          } else {
+            btnNext.disabled = false;
+            btnNext.textContent = 'Avançar ▶️';
+          }
+        }, delay);
+      }
+    });
+
+    // Novo pedido: reseta tudo
+    btnNew.addEventListener('click', () => {
+      currentStep = 0;
+      updateStepUI();
+      finalIcon.style.display = 'none';
+      finalMessage.textContent = '';
+      btnNext.textContent = 'Avançar ▶️';
+      btnNext.disabled = false;
+      Array.from(orderForm.elements).forEach(el => el.disabled = false);
+      orderForm.reset();
+      clearErrors();
+    });
+
+    // Histórico
+    function addOrderToHistory(order) {
+      ordersHistory.push(order);
+      saveHistory();
+      renderHistory();
+    }
+    function saveHistory() {
+      localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
+    }
+    function renderHistory() {
+      historyBody.innerHTML = '';
+      ordersHistory.forEach((order, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${order.number}</td>
+          <td>${order.client}</td>
+          <td>${order.value}</td>
+          <td>${order.status}</td>
+          <td><button aria-label="Excluir pedido ${order.number}" data-index="${index}">❌</button></td>
+        `;
+        historyBody.appendChild(tr);
+      });
+      // Botão excluir em cada linha
+      historyBody.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const idx = e.target.getAttribute('data-index');
+          ordersHistory.splice(idx, 1);
+          saveHistory();
+          renderHistory();
+        });
+      });
+    }
+
+    // Exportar CSV
+    btnExport.addEventListener('click', () => {
+      if (ordersHistory.length === 0) {
+        alert('Nenhum pedido no histórico para exportar.');
+        return;
+      }
+      const headers = ['Número', 'Cliente', 'Valor (R$)', 'Status'];
+      const rows = ordersHistory.map(o => [o.number, o.client, o.value, o.status]);
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      csvContent += headers.join(';') + '\r\n';
+      rows.forEach(row => {
+        csvContent += row.map(field => `"${field}"`).join(';') + '\r\n';
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'historico_pedidos.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    function clearErrors() {
+      ['OrderNumber', 'ClientName', 'OrderValue'].forEach(id => {
+        document.getElementById('error' + id).textContent = '';
+      });
+    }
+
+    // Inicialização
+    function init() {
+      updateStepUI();
+      renderHistory();
+    }
+
+    init();
+  })();
+</script>
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    margin: 20px;
+    color: #333;
+  }
+  .container {
+    max-width: 720px;
+    margin: auto;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 12px;
+    color: #512da8;
+  }
+  form {
+    margin-bottom: 24px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 4px;
+    min-height: 1.25rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 8px 16px;
+    color: white;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    user-select: none;
+  }
+  .recebido {
+    background-color: #512da8;
+  }
+  .processando {
+    background-color: #ef6c00;
+  }
+  .entregue {
+    background-color: #2e7d32;
+  }
+  .buttons-row {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  button {
+    background-color: #512da8;
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    margin: 0 8px;
+    border-radius: 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  button[disabled] {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+  button:hover:not([disabled]) {
+    background-color: #7e57c2;
+  }
+  .message {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #2e7d32;
+  }
+  .final-icon {
+    font-size: 2.8rem;
+    color: #2e7d32;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .history-container {
+    margin-top: 40px;
+  }
+  .history-container h2 {
+    margin-bottom: 12px;
+    color: #512da8;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th {
+    background-color: #512da8;
+    color: white;
+  }
+  td button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #d32f2f;
+    padding: 0;
+  }
+  td button:hover {
+    color: #9a0000;
+  }
+  .btn-export {
+    background-color: #ef6c00;
+    margin-top: 10px;
+  }
+  .btn-export:hover {
+    background-color: #ff9800;
+  }
+  .steps-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .step {
+    flex: 1;
+    padding: 8px;
+    margin: 0 6px;
+    background: #ddd;
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 600;
+    color: #666;
+    user-select: none;
+  }
+  .step.active {
+    background: #512da8;
+    color: white;
+  }
+</style>
+
 </body>
 </html>
