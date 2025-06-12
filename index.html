@@ -20,24 +20,24 @@
       line-height: 1.6;
     }
 
-    header {
+    header, footer {
       background-color: #2563eb;
-      color: #ffffff;
-      padding: 1.5rem;
+      color: white;
+      padding: 1rem;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     nav {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       background-color: #1e40af;
-      gap: 2rem;
+      gap: 1rem;
       padding: 1rem;
     }
 
     nav a {
-      color: #ffffff;
+      color: white;
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s;
@@ -54,11 +54,11 @@
     }
 
     section {
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       margin-bottom: 2rem;
+      padding: 1.5rem;
     }
 
     h2 {
@@ -66,29 +66,20 @@
       margin-bottom: 1rem;
     }
 
-    .card {
-      background-color: #f9fafb;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      border-left: 4px solid #2563eb;
-    }
-
     .form-control {
-      margin-top: 1rem;
+      margin-bottom: 1rem;
     }
 
-    label, input {
+    label {
       display: block;
       margin-top: 0.5rem;
     }
 
-    input[type="text"], input[type="number"] {
+    input[type="text"], input[type="number"], input[type="password"] {
       width: 100%;
       padding: 0.5rem;
-      border-radius: 6px;
       border: 1px solid #d1d5db;
-      margin-top: 0.25rem;
+      border-radius: 6px;
     }
 
     button {
@@ -109,35 +100,41 @@
       max-width: 100%;
       margin-top: 1rem;
     }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: #1e40af;
-      color: #ffffff;
-    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Simulador de Integração ERP</h1>
-    <p>Projeto educacional para demonstração de funcionalidades de um sistema ERP</p>
+    <h1>Simulador ERP Educacional</h1>
+    <p>Interface fictícia para estudos e demonstrações</p>
   </header>
 
   <nav>
+    <a href="#login">Login</a>
     <a href="#cadastro">Cadastro</a>
     <a href="#estoque">Estoque</a>
     <a href="#financeiro">Financeiro</a>
+    <a href="#despesas">Despesas</a>
     <a href="#vendas">Vendas</a>
     <a href="#relatorios">Relatórios</a>
   </nav>
 
   <main>
-    <section id="cadastro">
-      <h2>Cadastro</h2>
-      <div class="card">Cadastro de Clientes</div>
+    <section id="login">
+      <h2>Login Simulado</h2>
       <div class="form-control">
-        <label for="nomeCliente">Nome do Cliente:</label>
+        <label for="usuario">Usuário:</label>
+        <input type="text" id="usuario">
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha">
+        <button onclick="login()">Entrar</button>
+        <p id="loginStatus"></p>
+      </div>
+    </section>
+
+    <section id="cadastro">
+      <h2>Cadastro de Clientes</h2>
+      <div class="form-control">
+        <label for="nomeCliente">Nome:</label>
         <input type="text" id="nomeCliente">
         <label for="emailCliente">Email:</label>
         <input type="text" id="emailCliente">
@@ -147,34 +144,43 @@
     </section>
 
     <section id="estoque">
-      <h2>Controle de Estoque</h2>
-      <div class="card">Entrada de Produtos</div>
+      <h2>Estoque</h2>
       <div class="form-control">
         <label for="produto">Produto:</label>
         <input type="text" id="produto">
         <label for="quantidade">Quantidade:</label>
         <input type="number" id="quantidade">
-        <button onclick="adicionarEstoque()">Adicionar ao Estoque</button>
+        <button onclick="adicionarEstoque()">Adicionar</button>
       </div>
       <div id="estoqueLista"></div>
     </section>
 
     <section id="financeiro">
-      <h2>Financeiro</h2>
-      <div class="card">Contas a Receber</div>
+      <h2>Receitas</h2>
       <div class="form-control">
         <label for="descricaoReceita">Descrição:</label>
         <input type="text" id="descricaoReceita">
-        <label for="valorReceita">Valor (R$):</label>
+        <label for="valorReceita">Valor:</label>
         <input type="number" id="valorReceita">
-        <button onclick="registrarReceita()">Registrar Receita</button>
+        <button onclick="registrarReceita()">Registrar</button>
       </div>
       <div id="financeiroLista"></div>
     </section>
 
+    <section id="despesas">
+      <h2>Despesas</h2>
+      <div class="form-control">
+        <label for="descricaoDespesa">Descrição:</label>
+        <input type="text" id="descricaoDespesa">
+        <label for="valorDespesa">Valor:</label>
+        <input type="number" id="valorDespesa">
+        <button onclick="registrarDespesa()">Registrar</button>
+      </div>
+      <div id="despesasLista"></div>
+    </section>
+
     <section id="vendas">
       <h2>Vendas</h2>
-      <div class="card">Emissão de Pedidos</div>
       <div class="form-control">
         <label for="pedidoProduto">Produto:</label>
         <input type="text" id="pedidoProduto">
@@ -193,96 +199,71 @@
   </main>
 
   <footer>
-    Projeto desenvolvido por Juliana Araújo · Simulador de ERP Educacional
+    Desenvolvido por Juliana Araújo · 2024-2025
   </footer>
 
   <script>
-    const clientes = [];
-    const estoque = [];
-    const receitas = [];
-    const pedidos = [];
+    const clientes = [], estoque = [], receitas = [], despesas = [], pedidos = [];
+    let chartReceitas, chartEstoque;
 
-    function cadastrarCliente() {
-      const nome = document.getElementById('nomeCliente').value;
-      const email = document.getElementById('emailCliente').value;
-      clientes.push({ nome, email });
-      atualizarListaClientes();
+    function login() {
+      const u = document.getElementById('usuario').value;
+      const s = document.getElementById('senha').value;
+      const msg = document.getElementById('loginStatus');
+      if (u === 'admin' && s === '123') {
+        msg.textContent = 'Login realizado com sucesso!';
+        msg.style.color = 'green';
+      } else {
+        msg.textContent = 'Usuário ou senha incorretos.';
+        msg.style.color = 'red';
+      }
     }
 
-    function atualizarListaClientes() {
-      const lista = document.getElementById('listaClientes');
-      lista.innerHTML = '<h3>Clientes Cadastrados:</h3>' + clientes.map(c => `<div>👤 ${c.nome} (${c.email})</div>`).join('');
+    function cadastrarCliente() {
+      clientes.push({ nome: nomeCliente.value, email: emailCliente.value });
+      listaClientes.innerHTML = '<h3>Clientes:</h3>' + clientes.map(c => `👤 ${c.nome} (${c.email})`).join('<br>');
     }
 
     function adicionarEstoque() {
-      const produto = document.getElementById('produto').value;
-      const qtd = parseInt(document.getElementById('quantidade').value);
-      estoque.push({ produto, qtd });
-      atualizarEstoque();
+      estoque.push({ produto: produto.value, qtd: parseInt(quantidade.value) });
+      estoqueLista.innerHTML = '<h3>Estoque:</h3>' + estoque.map(e => `📦 ${e.produto}: ${e.qtd}`).join('<br>');
       atualizarGraficoEstoque();
     }
 
-    function atualizarEstoque() {
-      const lista = document.getElementById('estoqueLista');
-      lista.innerHTML = '<h3>Estoque Atual:</h3>' + estoque.map(i => `<div>📦 ${i.produto}: ${i.qtd} unidades</div>`).join('');
-    }
-
     function registrarReceita() {
-      const descricao = document.getElementById('descricaoReceita').value;
-      const valor = parseFloat(document.getElementById('valorReceita').value);
-      receitas.push({ descricao, valor });
-      atualizarFinanceiro();
+      receitas.push({ descricao: descricaoReceita.value, valor: parseFloat(valorReceita.value) });
+      financeiroLista.innerHTML = '<h3>Receitas:</h3>' + receitas.map(r => `💰 ${r.descricao}: R$ ${r.valor.toFixed(2)}`).join('<br>');
       atualizarGraficoReceitas();
     }
 
-    function atualizarFinanceiro() {
-      const lista = document.getElementById('financeiroLista');
-      let total = receitas.reduce((soma, r) => soma + r.valor, 0);
-      lista.innerHTML = `<h3>Receitas:</h3>` + receitas.map(r => `<div>💰 ${r.descricao}: R$ ${r.valor.toFixed(2)}</div>`).join('') + `<p><strong>Total:</strong> R$ ${total.toFixed(2)}</p>`;
+    function registrarDespesa() {
+      despesas.push({ descricao: descricaoDespesa.value, valor: parseFloat(valorDespesa.value) });
+      despesasLista.innerHTML = '<h3>Despesas:</h3>' + despesas.map(d => `📉 ${d.descricao}: R$ ${d.valor.toFixed(2)}`).join('<br>');
     }
 
     function registrarPedido() {
-      const produto = document.getElementById('pedidoProduto').value;
-      const qtd = parseInt(document.getElementById('pedidoQtd').value);
-      pedidos.push({ produto, qtd });
-      atualizarPedidos();
+      pedidos.push({ produto: pedidoProduto.value, qtd: parseInt(pedidoQtd.value) });
+      vendasLista.innerHTML = '<h3>Pedidos:</h3>' + pedidos.map(p => `🧾 ${p.qtd}x ${p.produto}`).join('<br>');
     }
-
-    function atualizarPedidos() {
-      const lista = document.getElementById('vendasLista');
-      lista.innerHTML = '<h3>Pedidos Emitidos:</h3>' + pedidos.map(p => `<div>🧾 ${p.qtd}x ${p.produto}</div>`).join('');
-    }
-
-    let chartReceitas, chartEstoque;
 
     function atualizarGraficoReceitas() {
-      const ctx = document.getElementById('graficoReceitas').getContext('2d');
       if (chartReceitas) chartReceitas.destroy();
-      chartReceitas = new Chart(ctx, {
+      chartReceitas = new Chart(graficoReceitas, {
         type: 'bar',
         data: {
           labels: receitas.map(r => r.descricao),
-          datasets: [{
-            label: 'Receitas (R$)',
-            data: receitas.map(r => r.valor),
-            backgroundColor: '#2563eb'
-          }]
+          datasets: [{ label: 'Receitas', data: receitas.map(r => r.valor), backgroundColor: '#2563eb' }]
         }
       });
     }
 
     function atualizarGraficoEstoque() {
-      const ctx = document.getElementById('graficoEstoque').getContext('2d');
       if (chartEstoque) chartEstoque.destroy();
-      chartEstoque = new Chart(ctx, {
+      chartEstoque = new Chart(graficoEstoque, {
         type: 'pie',
         data: {
           labels: estoque.map(e => e.produto),
-          datasets: [{
-            label: 'Estoque',
-            data: estoque.map(e => e.qtd),
-            backgroundColor: ['#3b82f6', '#6366f1', '#10b981', '#f59e0b', '#ef4444']
-          }]
+          datasets: [{ label: 'Estoque', data: estoque.map(e => e.qtd), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'] }]
         }
       });
     }
