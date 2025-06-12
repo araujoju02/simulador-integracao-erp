@@ -1,803 +1,291 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Simulador de Integração - Pedido, API & ERP</title>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2942/2942931.png" type="image/png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Integração ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    :root {
-      --color-bg-light: #f8f4fa;
-      --color-text-light: #3a2e5b;
-      --color-primary: #6c52a6;
-      --color-primary-dark: #573d95;
-      --color-badge-recebido-bg: #d1c4e9;
-      --color-badge-recebido-text: #512da8;
-      --color-badge-processando-bg: #fff3e0;
-      --color-badge-processando-text: #ef6c00;
-      --color-badge-entregue-bg: #d0f0c0;
-      --color-badge-entregue-text: #2e7d32;
-      --color-success: #4CAF50;
-      --color-error: #e53935;
-      --color-shadow: rgba(58, 46, 91, 0.1);
-    }
-    [data-theme="dark"] {
-      --color-bg-light: #2c2a3a;
-      --color-text-light: #ddd9f3;
-      --color-primary: #9a7efc;
-      --color-primary-dark: #7c68db;
-      --color-badge-recebido-bg: #4a3f6a;
-      --color-badge-recebido-text: #c7c3f0;
-      --color-badge-processando-bg: #6a5a3b;
-      --color-badge-processando-text: #ffb74d;
-      --color-badge-entregue-bg: #2e4a32;
-      --color-badge-entregue-text: #a7d48c;
-      --color-success: #81c784;
-      --color-error: #ef9a9a;
-      --color-shadow: rgba(0,0,0,0.8);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--color-bg-light);
-      color: var(--color-text-light);
-      margin: 0;
-      padding: 20px;
+      background-color: #f3f4f6;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #2563eb;
+      color: #ffffff;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    nav {
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      transition: background-color 0.3s, color 0.3s;
+      background-color: #1e40af;
+      gap: 2rem;
+      padding: 1rem;
     }
-    .container {
-      background: white;
-      padding: 30px 30px 20px;
-      max-width: 520px;
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px var(--color-shadow);
-      text-align: center;
-      animation: fadeIn 1s ease-out;
-      position: relative;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 {
-      color: var(--color-primary);
-      margin-bottom: 10px;
-    }
-    p.description {
-      color: #8a7cb1;
-      font-size: 1rem;
-      margin-bottom: 25px;
-    }
-    label {
-      display: block;
-      text-align: left;
-      margin-bottom: 6px;
+
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
       font-weight: 600;
-      color: var(--color-primary);
+      transition: color 0.3s;
     }
+
+    nav a:hover {
+      color: #93c5fd;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    section {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      color: #1e3a8a;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background-color: #f9fafb;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid #2563eb;
+    }
+
+    .form-control {
+      margin-top: 1rem;
+    }
+
+    label, input {
+      display: block;
+      margin-top: 0.5rem;
+    }
+
     input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 10px 12px;
-      margin-bottom: 18px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      margin-top: 0.25rem;
     }
-    input[type="text"]:focus, input[type="number"]:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: 0 0 8px var(--color-primary);
-    }
-    .steps {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 25px;
-      font-size: 2rem;
-      user-select: none;
-    }
-    .step {
-      flex: 1;
-      opacity: 0.4;
-      transition: opacity 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .step.active {
-      opacity: 1;
-      color: var(--color-primary);
-    }
-    .step-label {
-      font-size: 0.9rem;
-      color: var(--color-primary);
-      margin-top: 6px;
-      font-weight: 600;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      font-weight: 600;
-      border-radius: 20px;
-      font-size: 1rem;
-      user-select: none;
-      margin-bottom: 25px;
-      min-width: 240px;
-      justify-content: center;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .badge.recebido {
-      background: var(--color-badge-recebido-bg);
-      color: var(--color-badge-recebido-text);
-    }
-    .badge.processando {
-      background: var(--color-badge-processando-bg);
-      color: var(--color-badge-processando-text);
-    }
-    .badge.entregue {
-      background: var(--color-badge-entregue-bg);
-      color: var(--color-badge-entregue-text);
-    }
+
     button {
-      background: var(--color-primary);
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #2563eb;
       color: white;
       border: none;
-      padding: 12px 28px;
-      font-size: 1.1rem;
-      border-radius: 24px;
+      border-radius: 6px;
       cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 6px 12px rgba(108, 82, 166, 0.4);
-      transition: background-color 0.3s ease;
-      user-select: none;
-      margin: 0 6px;
     }
-    button:hover:not(:disabled) {
-      background: var(--color-primary-dark);
+
+    button:hover {
+      background-color: #1e3a8a;
     }
-    button:disabled {
-      background: #b7a8d8;
-      cursor: not-allowed;
-      box-shadow: none;
+
+    canvas {
+      max-width: 100%;
+      margin-top: 1rem;
     }
-    .message {
-      font-size: 1.05rem;
-      color: var(--color-text-light);
-      margin-bottom: 30px;
-      min-height: 56px;
-      transition: opacity 0.5s ease;
-      user-select: none;
-    }
-    .form-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    .input-row {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .input-row > div {
-      flex: 1;
-      min-width: 140px;
-    }
-    .error-message {
-      color: var(--color-error);
-      font-size: 0.85rem;
-      margin-top: -12px;
-      margin-bottom: 12px;
-      text-align: left;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 0.9rem;
-    }
-    th, td {
-      padding: 8px 10px;
-      border: 1px solid #ddd;
+
+    footer {
       text-align: center;
-    }
-    th {
-      background: var(--color-primary);
-      color: white;
-      font-weight: 600;
-    }
-    tbody tr:nth-child(even) {
-      background: #f3f0ff;
-    }
-    tbody tr:hover {
-      background: #e0dbf7;
-    }
-    .history-container {
-      margin-top: 30px;
-      max-height: 220px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 12px 10px;
-      background: #faf7ff;
-    }
-    .btn-delete {
-      background: #e53935;
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      box-shadow: none;
-      transition: background-color 0.3s ease;
-      color: white;
-    }
-    .btn-delete:hover {
-      background: #b71c1c;
-    }
-    .btn-export {
-      background: #4caf50;
-      padding: 10px 24px;
-      border-radius: 24px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: none;
-      transition: background-color 0.3s ease;
-      color: white;
-      margin-top: 12px;
-      user-select: none;
-    }
-    .btn-export:hover {
-      background: #357a38;
-    }
-    .buttons-row {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-    .final-icon {
-      font-size: 5rem;
-      color: var(--color-success);
-      margin-bottom: 12px;
-      animation: popIn 0.8s ease forwards;
-      user-select: none;
-    }
-    @keyframes popIn {
-      0% { transform: scale(0.2); opacity: 0; }
-      60% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(1); }
-    }
-    .final-message {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--color-primary);
-      user-select: none;
-      animation: fadeSlideIn 1s ease forwards;
-    }
-    @keyframes fadeSlideIn {
-      0% { opacity: 0; transform: translateY(15px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    /* Toggle Theme button */
-    .theme-toggle {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      background: var(--color-primary);
-      border: none;
-      color: white;
-      font-weight: 700;
-      font-size: 1rem;
-      border-radius: 30px;
-      padding: 8px 20px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(108, 82, 166, 0.4);
-      user-select: none;
-      transition: background-color 0.3s ease;
-      z-index: 999;
-    }
-    .theme-toggle:hover {
-      background: var(--color-primary-dark);
+      padding: 1rem;
+      background-color: #1e40af;
+      color: #ffffff;
     }
   </style>
 </head>
-<body data-theme="light">
+<body>
+  <header>
+    <h1>Simulador de Integração ERP</h1>
+    <p>Projeto educacional para demonstração de funcionalidades de um sistema ERP</p>
+  </header>
 
-  <button class="theme-toggle" id="themeToggle" title="Alternar tema claro/escuro">🌙 Tema</button>
+  <nav>
+    <a href="#cadastro">Cadastro</a>
+    <a href="#estoque">Estoque</a>
+    <a href="#financeiro">Financeiro</a>
+    <a href="#vendas">Vendas</a>
+    <a href="#relatorios">Relatórios</a>
+  </nav>
 
-  <div class="container" role="main" aria-label="Simulador de Integração ERP">
-
-    <h1>Simulador de Integração</h1>
-    <p class="description">Simule o fluxo do pedido desde o recebimento até a entrega no ERP.</p>
-
-    <div class="steps" aria-live="polite">
-      <div class="step active" id="step-pedido" aria-current="step">📦<div class="step-label">Pedido</div></div>
-      <div class="step" id="step-api">🔄<div class="step-label">API</div></div>
-      <div class="step" id="step-erp">🖥️<div class="step-label">ERP</div></div>
-      <div class="step" id="step-finalizado">🎉<div class="step-label">Finalizado</div></div>
-    </div>
-
-    <form id="orderForm" novalidate>
-      <div class="input-row" id="formInputs">
-        <div class="form-group">
-          <label for="orderNumber">Número do Pedido *</label>
-          <input type="text" id="orderNumber" name="orderNumber" autocomplete="off" required aria-required="true" aria-describedby="errorOrderNumber" />
-          <div class="error-message" id="errorOrderNumber" role="alert" aria-live="assertive"></div>
-        </div>
-        <div class="form-group">
-          <label for="clientName">Nome do Cliente *</label>
-          <input type="text" id="clientName" name="clientName" autocomplete="off" required aria-required="true" aria-describedby="errorClientName" />
-          <div class="error-message" id="errorClientName" role="alert" aria-live="assertive"></div>
-        </div>
-        <div class="form-group">
-          <label for="orderValue">Valor (R$) *</label>
-          <input type="text" id="orderValue" name="orderValue" placeholder="R$ 0,00" autocomplete="off" required aria-required="true" aria-describedby="errorOrderValue" inputmode="decimal" />
-          <div class="error-message" id="errorOrderValue" role="alert" aria-live="assertive"></div>
-        </div>
+  <main>
+    <section id="cadastro">
+      <h2>Cadastro</h2>
+      <div class="card">Cadastro de Clientes</div>
+      <div class="form-control">
+        <label for="nomeCliente">Nome do Cliente:</label>
+        <input type="text" id="nomeCliente">
+        <label for="emailCliente">Email:</label>
+        <input type="text" id="emailCliente">
+        <button onclick="cadastrarCliente()">Cadastrar</button>
       </div>
-    </form>
-
-    <div class="badge recebido" id="statusBadge" aria-live="polite">Status: Pedido Recebido</div>
-
-    <div class="buttons-row">
-      <button id="btnNext" type="button" aria-label="Avançar para próxima etapa">Avançar ▶️</button>
-      <button id="btnNew" type="button" style="display:none;" aria-label="Novo pedido">Novo Pedido</button>
-    </div>
-
-    <div class="message" id="finalMessage" aria-live="polite" role="status"></div>
-    <div class="final-icon" id="finalIcon" aria-hidden="true" style="display:none;">✔️</div>
-
-    <section class="history-container" aria-label="Histórico de pedidos simulados">
-      <h2>Histórico de Pedidos</h2>
-      <table id="historyTable" aria-live="polite" role="grid">
-        <thead>
-          <tr>
-            <th scope="col">Número</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Valor (R$)</th>
-            <th scope="col">Status</th>
-            <th scope="col">Excluir</th>
-          </tr>
-        </thead>
-        <tbody id="historyBody">
-          <!-- Histórico vai aqui -->
-        </tbody>
-      </table>
-      <button class="btn-export" id="btnExport" aria-label="Exportar histórico para CSV">Exportar CSV</button>
+      <div id="listaClientes"></div>
     </section>
 
-  </div>
+    <section id="estoque">
+      <h2>Controle de Estoque</h2>
+      <div class="card">Entrada de Produtos</div>
+      <div class="form-control">
+        <label for="produto">Produto:</label>
+        <input type="text" id="produto">
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade">
+        <button onclick="adicionarEstoque()">Adicionar ao Estoque</button>
+      </div>
+      <div id="estoqueLista"></div>
+    </section>
 
-<script>
-  (() => {
-    const orderForm = document.getElementById('orderForm');
-    const btnNext = document.getElementById('btnNext');
-    const btnNew = document.getElementById('btnNew');
-    const statusBadge = document.getElementById('statusBadge');
-    const finalMessage = document.getElementById('finalMessage');
-    const finalIcon = document.getElementById('finalIcon');
-    const historyBody = document.getElementById('historyBody');
-    const btnExport = document.getElementById('btnExport');
-    const themeToggle = document.getElementById('themeToggle');
+    <section id="financeiro">
+      <h2>Financeiro</h2>
+      <div class="card">Contas a Receber</div>
+      <div class="form-control">
+        <label for="descricaoReceita">Descrição:</label>
+        <input type="text" id="descricaoReceita">
+        <label for="valorReceita">Valor (R$):</label>
+        <input type="number" id="valorReceita">
+        <button onclick="registrarReceita()">Registrar Receita</button>
+      </div>
+      <div id="financeiroLista"></div>
+    </section>
 
-    let currentStep = 0;
-    const steps = ['Pedido Recebido', 'Processando API', 'Pedido Entregue no ERP', 'Integração Concluída'];
-    const stepIds = ['step-pedido', 'step-api', 'step-erp', 'step-finalizado'];
-    const statusClasses = ['recebido', 'processando', 'entregue', 'entregue'];
-    const statusColors = ['#512da8', '#ef6c00', '#2e7d32', '#2e7d32'];
+    <section id="vendas">
+      <h2>Vendas</h2>
+      <div class="card">Emissão de Pedidos</div>
+      <div class="form-control">
+        <label for="pedidoProduto">Produto:</label>
+        <input type="text" id="pedidoProduto">
+        <label for="pedidoQtd">Quantidade:</label>
+        <input type="number" id="pedidoQtd">
+        <button onclick="registrarPedido()">Emitir Pedido</button>
+      </div>
+      <div id="vendasLista"></div>
+    </section>
 
-    let ordersHistory = JSON.parse(localStorage.getItem('ordersHistory')) || [];
+    <section id="relatorios">
+      <h2>Relatórios</h2>
+      <canvas id="graficoReceitas"></canvas>
+      <canvas id="graficoEstoque"></canvas>
+    </section>
+  </main>
 
-    function updateStepUI() {
-      stepIds.forEach((id, i) => {
-        const stepElem = document.getElementById(id);
-        if (!stepElem) return;
-        if (i === currentStep) {
-          stepElem.classList.add('active');
-          stepElem.setAttribute('aria-current', 'step');
-        } else {
-          stepElem.classList.remove('active');
-          stepElem.removeAttribute('aria-current');
+  <footer>
+    Projeto desenvolvido por Beatriz · Simulador de ERP Educacional
+  </footer>
+
+  <script>
+    const clientes = [];
+    const estoque = [];
+    const receitas = [];
+    const pedidos = [];
+
+    function cadastrarCliente() {
+      const nome = document.getElementById('nomeCliente').value;
+      const email = document.getElementById('emailCliente').value;
+      clientes.push({ nome, email });
+      atualizarListaClientes();
+    }
+
+    function atualizarListaClientes() {
+      const lista = document.getElementById('listaClientes');
+      lista.innerHTML = '<h3>Clientes Cadastrados:</h3>' + clientes.map(c => `<div>👤 ${c.nome} (${c.email})</div>`).join('');
+    }
+
+    function adicionarEstoque() {
+      const produto = document.getElementById('produto').value;
+      const qtd = parseInt(document.getElementById('quantidade').value);
+      estoque.push({ produto, qtd });
+      atualizarEstoque();
+      atualizarGraficoEstoque();
+    }
+
+    function atualizarEstoque() {
+      const lista = document.getElementById('estoqueLista');
+      lista.innerHTML = '<h3>Estoque Atual:</h3>' + estoque.map(i => `<div>📦 ${i.produto}: ${i.qtd} unidades</div>`).join('');
+    }
+
+    function registrarReceita() {
+      const descricao = document.getElementById('descricaoReceita').value;
+      const valor = parseFloat(document.getElementById('valorReceita').value);
+      receitas.push({ descricao, valor });
+      atualizarFinanceiro();
+      atualizarGraficoReceitas();
+    }
+
+    function atualizarFinanceiro() {
+      const lista = document.getElementById('financeiroLista');
+      let total = receitas.reduce((soma, r) => soma + r.valor, 0);
+      lista.innerHTML = `<h3>Receitas:</h3>` + receitas.map(r => `<div>💰 ${r.descricao}: R$ ${r.valor.toFixed(2)}</div>`).join('') + `<p><strong>Total:</strong> R$ ${total.toFixed(2)}</p>`;
+    }
+
+    function registrarPedido() {
+      const produto = document.getElementById('pedidoProduto').value;
+      const qtd = parseInt(document.getElementById('pedidoQtd').value);
+      pedidos.push({ produto, qtd });
+      atualizarPedidos();
+    }
+
+    function atualizarPedidos() {
+      const lista = document.getElementById('vendasLista');
+      lista.innerHTML = '<h3>Pedidos Emitidos:</h3>' + pedidos.map(p => `<div>🧾 ${p.qtd}x ${p.produto}</div>`).join('');
+    }
+
+    let chartReceitas, chartEstoque;
+
+    function atualizarGraficoReceitas() {
+      const ctx = document.getElementById('graficoReceitas').getContext('2d');
+      if (chartReceitas) chartReceitas.destroy();
+      chartReceitas = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: receitas.map(r => r.descricao),
+          datasets: [{
+            label: 'Receitas (R$)',
+            data: receitas.map(r => r.valor),
+            backgroundColor: '#2563eb'
+          }]
         }
       });
-
-      // Atualiza badge
-      statusBadge.textContent = 'Status: ' + steps[currentStep];
-      statusBadge.className = 'badge ' + statusClasses[currentStep];
-
-      // Desabilita botões dependendo do passo
-      btnNext.disabled = currentStep === steps.length - 1;
-      btnNew.style.display = currentStep === steps.length - 1 ? 'inline-block' : 'none';
-
-      if (currentStep === steps.length - 1) {
-        // Final
-        finalIcon.style.display = 'block';
-        finalMessage.textContent = 'Pedido integrado com sucesso! 🎉';
-        btnNext.style.cursor = 'not-allowed';
-      } else {
-        finalIcon.style.display = 'none';
-        finalMessage.textContent = '';
-        btnNext.style.cursor = 'pointer';
-      }
     }
 
-    // Validação básica
-    function validateForm() {
-      let valid = true;
-
-      const orderNumber = orderForm.orderNumber.value.trim();
-      const clientName = orderForm.clientName.value.trim();
-      const orderValueRaw = orderForm.orderValue.value.trim();
-
-      // Limpa erros
-      ['OrderNumber', 'ClientName', 'OrderValue'].forEach(id => {
-        document.getElementById('error' + id).textContent = '';
-      });
-
-      if (!orderNumber) {
-        document.getElementById('errorOrderNumber').textContent = 'Número do pedido é obrigatório.';
-        valid = false;
-      }
-      if (!clientName) {
-        document.getElementById('errorClientName').textContent = 'Nome do cliente é obrigatório.';
-        valid = false;
-      }
-      // Valor deve estar no formato R$ 0,00
-      // Remove R$, espaços e pontos, troca vírgula por ponto para parsear float
-      let valueNum = parseFloat(orderValueRaw.replace(/[R$\s\.]/g, '').replace(',', '.'));
-      if (!orderValueRaw || isNaN(valueNum) || valueNum <= 0) {
-        document.getElementById('errorOrderValue').textContent = 'Valor deve ser maior que zero.';
-        valid = false;
-      }
-
-      return valid;
-    }
-
-    // Máscara simples para valor R$
-    function formatCurrency(value) {
-      // Remove tudo que não for número ou vírgula
-      value = value.replace(/[^\d\,]/g, '');
-
-      // Substitui vírgula por ponto temporariamente para formatar
-      value = value.replace(',', '.');
-
-      let num = parseFloat(value);
-      if (isNaN(num)) return '';
-
-      return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    // Formata campo valor enquanto digita
-    const orderValueInput = orderForm.orderValue;
-    orderValueInput.addEventListener('input', e => {
-      let cursorPos = orderValueInput.selectionStart;
-      let oldLength = orderValueInput.value.length;
-
-      let val = orderValueInput.value;
-
-      // Remove prefix R$ para evitar repetição
-      val = val.replace(/^R\$\s?/, '');
-
-      // Formata
-      val = val.replace(/[^\d\,\.]/g, ''); // só números, vírgula e ponto
-      // Troca ponto por vírgula, pois BR usa vírgula para decimal
-      val = val.replace(/\./g, ',');
-
-      // Remove vírgulas extras
-      let parts = val.split(',');
-      if (parts.length > 2) {
-        val = parts[0] + ',' + parts.slice(1).join('');
-      }
-
-      let numericPart = val.replace(',', '.');
-      let floatVal = parseFloat(numericPart);
-      if (isNaN(floatVal)) {
-        orderValueInput.value = '';
-        return;
-      }
-
-      let formatted = floatVal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2, style: 'currency', currency: 'BRL' });
-      orderValueInput.value = formatted;
-
-      // Ajusta cursor
-      let newLength = orderValueInput.value.length;
-      let diff = newLength - oldLength;
-      orderValueInput.selectionStart = orderValueInput.selectionEnd = cursorPos + diff;
-    });
-
-    // Avançar etapa
-    btnNext.addEventListener('click', () => {
-      if (currentStep === 0) {
-        // Validar formulário antes de avançar do pedido
-        if (!validateForm()) return;
-      }
-      if (currentStep < steps.length - 1) {
-        btnNext.disabled = true;
-        btnNext.textContent = 'Processando... ⏳';
-
-        // Simula tempo para cada etapa: 1.5s para API, 2s para ERP, 1.5s para finalização
-        let delay = 1500;
-        if (currentStep === 1) delay = 2000;
-
-        setTimeout(() => {
-          currentStep++;
-          updateStepUI();
-
-          if (currentStep === steps.length - 1) {
-            // Salvar pedido no histórico
-            addOrderToHistory({
-              number: orderForm.orderNumber.value.trim(),
-              client: orderForm.clientName.value.trim(),
-              value: orderForm.orderValue.value.trim(),
-              status: steps[currentStep]
-            });
-            // Bloqueia form inputs e botão avançar
-            Array.from(orderForm.elements).forEach(el => el.disabled = true);
-            btnNext.disabled = true;
-          } else {
-            btnNext.disabled = false;
-            btnNext.textContent = 'Avançar ▶️';
-          }
-        }, delay);
-      }
-    });
-
-    // Novo pedido: reseta tudo
-    btnNew.addEventListener('click', () => {
-      currentStep = 0;
-      updateStepUI();
-      finalIcon.style.display = 'none';
-      finalMessage.textContent = '';
-      btnNext.textContent = 'Avançar ▶️';
-      btnNext.disabled = false;
-      Array.from(orderForm.elements).forEach(el => el.disabled = false);
-      orderForm.reset();
-      clearErrors();
-    });
-
-    // Histórico
-    function addOrderToHistory(order) {
-      ordersHistory.push(order);
-      saveHistory();
-      renderHistory();
-    }
-    function saveHistory() {
-      localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
-    }
-    function renderHistory() {
-      historyBody.innerHTML = '';
-      ordersHistory.forEach((order, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${order.number}</td>
-          <td>${order.client}</td>
-          <td>${order.value}</td>
-          <td>${order.status}</td>
-          <td><button aria-label="Excluir pedido ${order.number}" data-index="${index}">❌</button></td>
-        `;
-        historyBody.appendChild(tr);
-      });
-      // Botão excluir em cada linha
-      historyBody.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const idx = e.target.getAttribute('data-index');
-          ordersHistory.splice(idx, 1);
-          saveHistory();
-          renderHistory();
-        });
+    function atualizarGraficoEstoque() {
+      const ctx = document.getElementById('graficoEstoque').getContext('2d');
+      if (chartEstoque) chartEstoque.destroy();
+      chartEstoque = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: estoque.map(e => e.produto),
+          datasets: [{
+            label: 'Estoque',
+            data: estoque.map(e => e.qtd),
+            backgroundColor: ['#3b82f6', '#6366f1', '#10b981', '#f59e0b', '#ef4444']
+          }]
+        }
       });
     }
-
-    // Exportar CSV
-    btnExport.addEventListener('click', () => {
-      if (ordersHistory.length === 0) {
-        alert('Nenhum pedido no histórico para exportar.');
-        return;
-      }
-      const headers = ['Número', 'Cliente', 'Valor (R$)', 'Status'];
-      const rows = ordersHistory.map(o => [o.number, o.client, o.value, o.status]);
-      let csvContent = 'data:text/csv;charset=utf-8,';
-      csvContent += headers.join(';') + '\r\n';
-      rows.forEach(row => {
-        csvContent += row.map(field => `"${field}"`).join(';') + '\r\n';
-      });
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'historico_pedidos.csv');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-
-    function clearErrors() {
-      ['OrderNumber', 'ClientName', 'OrderValue'].forEach(id => {
-        document.getElementById('error' + id).textContent = '';
-      });
-    }
-
-    // Inicialização
-    function init() {
-      updateStepUI();
-      renderHistory();
-    }
-
-    init();
-  })();
-</script>
-
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f9f9f9;
-    margin: 20px;
-    color: #333;
-  }
-  .container {
-    max-width: 720px;
-    margin: auto;
-    background: white;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 12px;
-    color: #512da8;
-  }
-  form {
-    margin-bottom: 24px;
-  }
-  .form-group {
-    margin-bottom: 16px;
-  }
-  label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  input[type="text"], input[type="number"] {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 1rem;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  .error-message {
-    color: #d32f2f;
-    font-size: 0.875rem;
-    margin-top: 4px;
-    min-height: 1.25rem;
-  }
-  .badge {
-    display: inline-block;
-    padding: 8px 16px;
-    color: white;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 16px;
-    user-select: none;
-  }
-  .recebido {
-    background-color: #512da8;
-  }
-  .processando {
-    background-color: #ef6c00;
-  }
-  .entregue {
-    background-color: #2e7d32;
-  }
-  .buttons-row {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  button {
-    background-color: #512da8;
-    border: none;
-    color: white;
-    padding: 12px 24px;
-    margin: 0 8px;
-    border-radius: 24px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s ease;
-  }
-  button[disabled] {
-    background-color: #999;
-    cursor: not-allowed;
-  }
-  button:hover:not([disabled]) {
-    background-color: #7e57c2;
-  }
-  .message {
-    text-align: center;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: #2e7d32;
-  }
-  .final-icon {
-    font-size: 2.8rem;
-    color: #2e7d32;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .history-container {
-    margin-top: 40px;
-  }
-  .history-container h2 {
-    margin-bottom: 12px;
-    color: #512da8;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 8px;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px 12px;
-    text-align: left;
-  }
-  th {
-    background-color: #512da8;
-    color: white;
-  }
-  td button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: #d32f2f;
-    padding: 0;
-  }
-  td button:hover {
-    color: #9a0000;
-  }
-  .btn-export {
-    background-color: #ef6c00;
-    margin-top: 10px;
-  }
-  .btn-export:hover {
-    background-color: #ff9800;
-  }
-  .steps-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .step {
-    flex: 1;
-    padding: 8px;
-    margin: 0 6px;
-    background: #ddd;
-    border-radius: 16px;
-    text-align: center;
-    font-weight: 600;
-    color: #666;
-    user-select: none;
-  }
-  .step.active {
-    background: #512da8;
-    color: white;
-  }
-</style>
-
+  </script>
 </body>
 </html>
