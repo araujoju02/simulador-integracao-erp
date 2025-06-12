@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Integração ERP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f6f8;
+      padding: 2rem;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #0066cc;
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    input, select, button {
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #0066cc;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #004b99;
+    }
+    .status {
+      background: #e8f4ea;
+      border-left: 4px solid #2e7d32;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+    .fluxo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 0;
+      font-weight: 600;
+    }
+    .fluxo span {
+      background: #e0ecf8;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    .seta {
+      font-size: 1.5rem;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔄 Simulador de Integração com ERP</h1>
+
+    <!-- Passo a passo visual -->
+    <div class="fluxo">
+      <span>📄 Pedido</span>
+      <span class="seta">➡️</span>
+      <span>🔗 API</span>
+      <span class="seta">➡️</span>
+      <span>🏢 ERP</span>
+    </div>
+
+    <!-- Formulário de pedido -->
+    <form id="formPedido">
+      <input type="text" id="cliente" placeholder="Nome do Cliente" required />
+      <input type="text" id="produto" placeholder="Produto" required />
+      <input type="number" id="valor" placeholder="Valor (R$)" required />
+      <select id="pagamento">
+        <option value="Boleto">Boleto</option>
+        <option value="Cartão">Cartão</option>
+        <option value="Pix">Pix</option>
+      </select>
+      <button type="submit">Enviar para ERP</button>
+    </form>
+
+    <!-- Resposta simulada -->
+    <div id="resposta" class="status" style="display: none;"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formPedido');
+    const resposta = document.getElementById('resposta');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Simula o payload enviado para o ERP via API
+      const payload = {
+        cliente: form.cliente.value,
+        produto: form.produto.value,
+        valor: parseFloat(form.valor.value),
+        forma_pagamento: form.pagamento.value,
+        status: "Enviado com sucesso"
+      };
+
+      // Simula um pequeno delay de envio
+      setTimeout(() => {
+        resposta.style.display = 'block';
+        resposta.textContent = JSON.stringify(payload, null, 2);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
