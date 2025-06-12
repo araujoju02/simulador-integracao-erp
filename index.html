@@ -1,128 +1,213 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador de Integração ERP</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simulador de Integração - Pedido, API & ERP</title>
   <style>
+    /* Reset básico */
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Inter', sans-serif;
-      background: #f4f6f8;
-      padding: 2rem;
-      color: #333;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f4fa;
+      color: #3a2e5b;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
     }
     .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: white;
+      padding: 30px;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(58, 46, 91, 0.1);
+      text-align: center;
     }
     h1 {
-      text-align: center;
-      color: #0066cc;
+      color: #6c52a6;
+      margin-bottom: 10px;
     }
-    form {
-      display: grid;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    input, select, button {
-      padding: 0.75rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+    p.description {
+      color: #8a7cb1;
       font-size: 1rem;
+      margin-bottom: 30px;
     }
-    button {
-      background-color: #0066cc;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-    button:hover {
-      background-color: #004b99;
-    }
-    .status {
-      background: #e8f4ea;
-      border-left: 4px solid #2e7d32;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 1rem;
-      white-space: pre-wrap;
-      font-family: monospace;
-    }
-    .fluxo {
-      display: flex;
-      justify-content: space-between;
+
+    /* Badge comum */
+    .badge {
+      display: inline-flex;
       align-items: center;
-      margin: 2rem 0;
+      gap: 8px;
+      padding: 8px 16px;
+      font-weight: 600;
+      border-radius: 20px;
+      font-size: 1rem;
+      user-select: none;
+      margin-bottom: 30px;
+      min-width: 240px;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+    /* Status diferentes */
+    .badge.recebido {
+      background: #d1c4e9;
+      color: #512da8;
+    }
+    .badge.processando {
+      background: #fff3e0;
+      color: #ef6c00;
+    }
+    .badge.entregue {
+      background: #d0f0c0;
+      color: #2e7d32;
+    }
+
+    /* Botão estilizado */
+    button {
+      background: #6c52a6;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      border-radius: 24px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 6px 12px rgba(108, 82, 166, 0.4);
+      transition: background-color 0.3s ease;
+    }
+    button:hover:not(:disabled) {
+      background: #573d95;
+    }
+    button:disabled {
+      background: #b7a8d8;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Ícones simples via Unicode */
+    .icon {
+      font-size: 1.4rem;
+    }
+
+    /* Passos visual */
+    .steps {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      user-select: none;
+    }
+    .step {
+      flex: 1;
+      opacity: 0.4;
+      transition: opacity 0.3s ease;
+    }
+    .step.active {
+      opacity: 1;
+      color: #6c52a6;
+    }
+    .step-label {
+      font-size: 0.9rem;
+      color: #6c52a6;
+      margin-top: 6px;
       font-weight: 600;
     }
-    .fluxo span {
-      background: #e0ecf8;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+
+    /* Mensagem explicativa */
+    .message {
+      font-size: 1.05rem;
+      color: #4a3f6a;
+      margin-bottom: 30px;
+      min-height: 48px;
     }
-    .seta {
-      font-size: 1.5rem;
-      color: #999;
-    }
+
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🔄 Simulador de Integração com ERP</h1>
+    <h1>Simulador de Integração</h1>
+    <p class="description">Simule o fluxo do pedido desde o recebimento até a entrega no ERP.</p>
 
-    <!-- Passo a passo visual -->
-    <div class="fluxo">
-      <span>📄 Pedido</span>
-      <span class="seta">➡️</span>
-      <span>🔗 API</span>
-      <span class="seta">➡️</span>
-      <span>🏢 ERP</span>
+    <!-- Passos com ícones -->
+    <div class="steps">
+      <div class="step active" id="step-pedido">
+        📦
+        <div class="step-label">Pedido</div>
+      </div>
+      <div class="step" id="step-api">
+        🔄
+        <div class="step-label">API</div>
+      </div>
+      <div class="step" id="step-erp">
+        🖥️
+        <div class="step-label">ERP</div>
+      </div>
     </div>
 
-    <!-- Formulário de pedido -->
-    <form id="formPedido">
-      <input type="text" id="cliente" placeholder="Nome do Cliente" required />
-      <input type="text" id="produto" placeholder="Produto" required />
-      <input type="number" id="valor" placeholder="Valor (R$)" required />
-      <select id="pagamento">
-        <option value="Boleto">Boleto</option>
-        <option value="Cartão">Cartão</option>
-        <option value="Pix">Pix</option>
-      </select>
-      <button type="submit">Enviar para ERP</button>
-    </form>
+    <!-- Badge com status -->
+    <div id="statusBadge" class="badge recebido">
+      ✅ Pedido recebido
+    </div>
 
-    <!-- Resposta simulada -->
-    <div id="resposta" class="status" style="display: none;"></div>
+    <!-- Mensagem explicativa -->
+    <div id="message" class="message">
+      O pedido foi recebido pelo sistema. Agora, vamos enviar para a API.
+    </div>
+
+    <!-- Botão para avançar no processo -->
+    <button id="nextBtn">Avançar</button>
   </div>
 
   <script>
-    const form = document.getElementById('formPedido');
-    const resposta = document.getElementById('resposta');
+    /* Estado da etapa atual (0 = pedido, 1 = API, 2 = ERP) */
+    let etapaAtual = 0;
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    // Referências dos elementos
+    const statusBadge = document.getElementById("statusBadge");
+    const message = document.getElementById("message");
+    const nextBtn = document.getElementById("nextBtn");
+    const steps = [
+      document.getElementById("step-pedido"),
+      document.getElementById("step-api"),
+      document.getElementById("step-erp"),
+    ];
 
-      // Simula o payload enviado para o ERP via API
-      const payload = {
-        cliente: form.cliente.value,
-        produto: form.produto.value,
-        valor: parseFloat(form.valor.value),
-        forma_pagamento: form.pagamento.value,
-        status: "Enviado com sucesso"
-      };
+    nextBtn.addEventListener("click", () => {
+      etapaAtual++;
 
-      // Simula um pequeno delay de envio
-      setTimeout(() => {
-        resposta.style.display = 'block';
-        resposta.textContent = JSON.stringify(payload, null, 2);
-      }, 1000);
+      if (etapaAtual === 1) {
+        // Atualiza passo ativo
+        steps[0].classList.remove("active");
+        steps[1].classList.add("active");
+
+        // Atualiza badge
+        statusBadge.textContent = "⏳ Processando na API";
+        statusBadge.className = "badge processando";
+
+        // Atualiza mensagem
+        message.textContent =
+          "O pedido está sendo processado pela API, integrando os dados.";
+      } else if (etapaAtual === 2) {
+        steps[1].classList.remove("active");
+        steps[2].classList.add("active");
+
+        statusBadge.textContent = "📦 Entregue ao ERP";
+        statusBadge.className = "badge entregue";
+
+        message.textContent =
+          "O pedido foi enviado ao ERP e está sendo processado para faturamento.";
+      } else {
+        // Fim do processo
+        nextBtn.disabled = true;
+        message.textContent =
+          "Processo concluído! Obrigada por usar o simulador, Juliana 😉.";
+      }
     });
   </script>
 </body>
 </html>
+
