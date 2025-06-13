@@ -3,109 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador de Integração ERP</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>ERP Feminino Simulado</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-
-    body {
-      background-color: #f3f4f6;
-      color: #1f2937;
-      line-height: 1.6;
-    }
-
-    header, footer {
-      background-color: #2563eb;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      background-color: #1e40af;
-      gap: 1rem;
-      padding: 1rem;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #93c5fd;
-    }
-
-    main {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    section {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-bottom: 2rem;
-      padding: 1.5rem;
-    }
-
-    h2 {
-      color: #1e3a8a;
-      margin-bottom: 1rem;
-    }
-
-    .form-control {
-      margin-bottom: 1rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 0.5rem;
-    }
-
-    input[type="text"], input[type="number"], input[type="password"] {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-    }
-
-    button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #1e3a8a;
-    }
-
-    canvas {
-      max-width: 100%;
-      margin-top: 1rem;
-    }
-  </style>
 </head>
 <body>
   <header>
-    <h1>Simulador ERP Educacional</h1>
-    <p>Interface fictícia para estudos e demonstrações</p>
+    <h1>✨ Simulador de Integração ERP ✨</h1>
+    <p>Gestão inteligente e charmosa 💼💖</p>
   </header>
 
   <nav>
@@ -120,153 +25,64 @@
 
   <main>
     <section id="login">
-      <h2>Login Simulado</h2>
-      <div class="form-control">
-        <label for="usuario">Usuário:</label>
-        <input type="text" id="usuario">
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha">
-        <button onclick="login()">Entrar</button>
-        <p id="loginStatus"></p>
-      </div>
+      <h2>👩‍💼 Login</h2>
+      <label>Usuário: <input type="text" id="usuario"></label>
+      <label>Senha: <input type="password" id="senha"></label>
+      <button onclick="login()">Entrar</button>
+      <p id="loginStatus"></p>
     </section>
 
     <section id="cadastro">
-      <h2>Cadastro de Clientes</h2>
-      <div class="form-control">
-        <label for="nomeCliente">Nome:</label>
-        <input type="text" id="nomeCliente">
-        <label for="emailCliente">Email:</label>
-        <input type="text" id="emailCliente">
-        <button onclick="cadastrarCliente()">Cadastrar</button>
-      </div>
+      <h2>📇 Cadastro de Clientes</h2>
+      <input type="text" id="nomeCliente" placeholder="Nome">
+      <input type="text" id="emailCliente" placeholder="Email">
+      <button onclick="cadastrarCliente()">Cadastrar</button>
       <div id="listaClientes"></div>
     </section>
 
     <section id="estoque">
-      <h2>Estoque</h2>
-      <div class="form-control">
-        <label for="produto">Produto:</label>
-        <input type="text" id="produto">
-        <label for="quantidade">Quantidade:</label>
-        <input type="number" id="quantidade">
-        <button onclick="adicionarEstoque()">Adicionar</button>
-      </div>
+      <h2>📦 Controle de Estoque</h2>
+      <input type="text" id="produto" placeholder="Nome do Produto">
+      <input type="number" id="quantidade" placeholder="Quantidade">
+      <button onclick="adicionarEstoque()">Adicionar ao Estoque</button>
       <div id="estoqueLista"></div>
     </section>
 
     <section id="financeiro">
-      <h2>Receitas</h2>
-      <div class="form-control">
-        <label for="descricaoReceita">Descrição:</label>
-        <input type="text" id="descricaoReceita">
-        <label for="valorReceita">Valor:</label>
-        <input type="number" id="valorReceita">
-        <button onclick="registrarReceita()">Registrar</button>
-      </div>
+      <h2>💰 Receitas</h2>
+      <input type="text" id="descricaoReceita" placeholder="Descrição">
+      <input type="number" id="valorReceita" placeholder="Valor">
+      <button onclick="registrarReceita()">Registrar Receita</button>
       <div id="financeiroLista"></div>
     </section>
 
     <section id="despesas">
-      <h2>Despesas</h2>
-      <div class="form-control">
-        <label for="descricaoDespesa">Descrição:</label>
-        <input type="text" id="descricaoDespesa">
-        <label for="valorDespesa">Valor:</label>
-        <input type="number" id="valorDespesa">
-        <button onclick="registrarDespesa()">Registrar</button>
-      </div>
+      <h2>📉 Despesas</h2>
+      <input type="text" id="descricaoDespesa" placeholder="Descrição">
+      <input type="number" id="valorDespesa" placeholder="Valor">
+      <button onclick="registrarDespesa()">Registrar Despesa</button>
       <div id="despesasLista"></div>
     </section>
 
     <section id="vendas">
-      <h2>Vendas</h2>
-      <div class="form-control">
-        <label for="pedidoProduto">Produto:</label>
-        <input type="text" id="pedidoProduto">
-        <label for="pedidoQtd">Quantidade:</label>
-        <input type="number" id="pedidoQtd">
-        <button onclick="registrarPedido()">Emitir Pedido</button>
-      </div>
+      <h2>🧾 Vendas</h2>
+      <input type="text" id="pedidoProduto" placeholder="Produto">
+      <input type="number" id="pedidoQtd" placeholder="Quantidade">
+      <button onclick="registrarPedido()">Emitir Pedido</button>
       <div id="vendasLista"></div>
     </section>
 
     <section id="relatorios">
-      <h2>Relatórios</h2>
+      <h2>📊 Relatórios</h2>
       <canvas id="graficoReceitas"></canvas>
       <canvas id="graficoEstoque"></canvas>
     </section>
   </main>
 
   <footer>
-    Desenvolvido por Juliana Araújo · 2024-2025
+    Desenvolvido por Juliana 💖 | Simulação ERP 2025
   </footer>
 
-  <script>
-    const clientes = [], estoque = [], receitas = [], despesas = [], pedidos = [];
-    let chartReceitas, chartEstoque;
-
-    function login() {
-      const u = document.getElementById('usuario').value;
-      const s = document.getElementById('senha').value;
-      const msg = document.getElementById('loginStatus');
-      if (u === 'admin' && s === '123') {
-        msg.textContent = 'Login realizado com sucesso!';
-        msg.style.color = 'green';
-      } else {
-        msg.textContent = 'Usuário ou senha incorretos.';
-        msg.style.color = 'red';
-      }
-    }
-
-    function cadastrarCliente() {
-      clientes.push({ nome: nomeCliente.value, email: emailCliente.value });
-      listaClientes.innerHTML = '<h3>Clientes:</h3>' + clientes.map(c => `👤 ${c.nome} (${c.email})`).join('<br>');
-    }
-
-    function adicionarEstoque() {
-      estoque.push({ produto: produto.value, qtd: parseInt(quantidade.value) });
-      estoqueLista.innerHTML = '<h3>Estoque:</h3>' + estoque.map(e => `📦 ${e.produto}: ${e.qtd}`).join('<br>');
-      atualizarGraficoEstoque();
-    }
-
-    function registrarReceita() {
-      receitas.push({ descricao: descricaoReceita.value, valor: parseFloat(valorReceita.value) });
-      financeiroLista.innerHTML = '<h3>Receitas:</h3>' + receitas.map(r => `💰 ${r.descricao}: R$ ${r.valor.toFixed(2)}`).join('<br>');
-      atualizarGraficoReceitas();
-    }
-
-    function registrarDespesa() {
-      despesas.push({ descricao: descricaoDespesa.value, valor: parseFloat(valorDespesa.value) });
-      despesasLista.innerHTML = '<h3>Despesas:</h3>' + despesas.map(d => `📉 ${d.descricao}: R$ ${d.valor.toFixed(2)}`).join('<br>');
-    }
-
-    function registrarPedido() {
-      pedidos.push({ produto: pedidoProduto.value, qtd: parseInt(pedidoQtd.value) });
-      vendasLista.innerHTML = '<h3>Pedidos:</h3>' + pedidos.map(p => `🧾 ${p.qtd}x ${p.produto}`).join('<br>');
-    }
-
-    function atualizarGraficoReceitas() {
-      if (chartReceitas) chartReceitas.destroy();
-      chartReceitas = new Chart(graficoReceitas, {
-        type: 'bar',
-        data: {
-          labels: receitas.map(r => r.descricao),
-          datasets: [{ label: 'Receitas', data: receitas.map(r => r.valor), backgroundColor: '#2563eb' }]
-        }
-      });
-    }
-
-    function atualizarGraficoEstoque() {
-      if (chartEstoque) chartEstoque.destroy();
-      chartEstoque = new Chart(graficoEstoque, {
-        type: 'pie',
-        data: {
-          labels: estoque.map(e => e.produto),
-          datasets: [{ label: 'Estoque', data: estoque.map(e => e.qtd), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'] }]
-        }
-      });
-    }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
