@@ -1,4 +1,4 @@
-# Simulador de Integração com ERP
+# Simulador de Integração com ERP - TRABALHO UNOPAR/ANHANGUERA - 
 
 Este projeto é uma simulação simples do fluxo de integração de pedidos entre um sistema de vendas e um ERP, que representa parte do meu dia a dia como Analista de Implantação.
 
